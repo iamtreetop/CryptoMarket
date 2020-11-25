@@ -21,7 +21,7 @@ Potential additional features:
 
 This app will consist of a single screen in the center with an interactive chart displayed. There is a search bar at the top of the page for users to find. Links to my Github and LinkedIn will be found on the bottom left corner. The sound control will be included in the right side bar as well.
 
-![wireframes](https://github.com/iamtreetop/fyuz-em/blob/main/assets/images/wireframe.png)
+![wireframes](https://github.com/iamtreetop/CryptoMarket/blob/main/readme/wireframe.png)
 
 ### Architecture and Technologies
 
