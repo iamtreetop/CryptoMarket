@@ -3,26 +3,48 @@ const d3 = require('d3');
 
 export default async function chart(symbol) {
     console.log("we in chart")
+    const apiUrl = `https://api.coindesk.com/v1/bpi/historical/close.json?start=2019-01-01&end=2019-12-31`
     
-    const finnhubData = fetch(
-        `https://finnhub.io/api/v1/crypto/symbol?exchange=binance&token=buurd5f48v6rvcd7bba0`, { json: true }, (err, res, body) => {
-        // `https://finnhub.io/api/v1/crypto/candle?symbol=BINANCE:BTCUSDT&resolution=D&from=1572651390&to=1575243390&token=buurd5f48v6rvcd7bba0`
-    }).then(resp => {
-        debugger
-        console.log(resp)
-        resp.json()
-        });
-    console.log(finnhubData)
+    
+    fetch(apiUrl, { method: 'GET', mode: 'cors' })
+    .then((resp) => {
+        return resp.json()})
+        .then((data) => {
+            // parseData(data);
+            debugger
+            drawChart(parseData(data.bpi));
+        })
+        .catch((err) => {console.log(err)})
+        
+        // console.log(coindeskData)
     let chartResultData = [];
+    function parseData (data) 
+    { debugger
+        for (let i in data) {
+            chartResultData.push({
+                date: new Date(i),
+                value: +data[i]
+            })
+        }
+    }
 
+    // drawChart(chartResultData);
 
+    function drawChart (data) {
+        debugger
+        const margin = { top: 50, right: 50, bottom: 50, left: 50 };
+        const width = window.innerWidth - margin.left - margin.right;
+        const height = window.innerHeight - margin.top - margin.bottom; 
+        // add SVG to the page
+        const svg = d3
+            .select('#chart')
+            .append('svg')
+            .attr('width', width + margin['left'] + margin['right'])
+            .attr('height', height + margin['top'] + margin['bottom'])
+            // .call(responsivefy)
+            .append('g')
+            .attr('transform', `translate(${margin['left']},  ${margin['top']})`);
+    }
 
-    // const finnhubData = fetch('https://finnhub.io/api/v1/crypto/candle?symbol=BINANCE:BTCUSDT&resolution=D&from=1572651390&to=1575243390&token=buurd5f48v6rvcd7bba0', { json: true }, (err, res, body) => {
-    // debugger    
-    // if (err) { return console.log(err); }
-    //     console.log(body.url);
-    //     console.log(body.explanation);
-    // });
-
+    drawChart(chartResultData);
 }
-

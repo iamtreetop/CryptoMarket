@@ -77,29 +77,56 @@ function chart(_x) {
 
 function _chart() {
   _chart = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(symbol) {
-    var finnhubData, chartResultData;
+    var apiUrl, chartResultData, parseData, drawChart;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            console.log("we in chart");
-            finnhubData = fetch("https://finnhub.io/api/v1/crypto/symbol?exchange=binance&token=buurd5f48v6rvcd7bba0", {
-              json: true
-            }, function (err, res, body) {// `https://finnhub.io/api/v1/crypto/candle?symbol=BINANCE:BTCUSDT&resolution=D&from=1572651390&to=1575243390&token=buurd5f48v6rvcd7bba0`
-            }).then(function (resp) {
+            drawChart = function _drawChart(data) {
               debugger;
-              console.log(resp);
-              resp.json();
-            });
-            console.log(finnhubData);
-            chartResultData = []; // const finnhubData = fetch('https://finnhub.io/api/v1/crypto/candle?symbol=BINANCE:BTCUSDT&resolution=D&from=1572651390&to=1575243390&token=buurd5f48v6rvcd7bba0', { json: true }, (err, res, body) => {
-            // debugger    
-            // if (err) { return console.log(err); }
-            //     console.log(body.url);
-            //     console.log(body.explanation);
-            // });
+              var margin = {
+                top: 50,
+                right: 50,
+                bottom: 50,
+                left: 50
+              };
+              var width = window.innerWidth - margin.left - margin.right;
+              var height = window.innerHeight - margin.top - margin.bottom; // add SVG to the page
 
-          case 4:
+              var svg = d3.select('#chart').append('svg').attr('width', width + margin['left'] + margin['right']).attr('height', height + margin['top'] + margin['bottom']) // .call(responsivefy)
+              .append('g').attr('transform', "translate(".concat(margin['left'], ",  ").concat(margin['top'], ")"));
+            };
+
+            parseData = function _parseData(data) {
+              debugger;
+
+              for (var i in data) {
+                chartResultData.push({
+                  date: new Date(i),
+                  value: +data[i]
+                });
+              }
+            };
+
+            console.log("we in chart");
+            apiUrl = "https://api.coindesk.com/v1/bpi/historical/close.json?start=2019-01-01&end=2019-12-31";
+            fetch(apiUrl, {
+              method: 'GET',
+              mode: 'cors'
+            }).then(function (resp) {
+              return resp.json();
+            }).then(function (data) {
+              // parseData(data);
+              debugger;
+              drawChart(parseData(data.bpi));
+            })["catch"](function (err) {
+              console.log(err);
+            }); // console.log(coindeskData)
+
+            chartResultData = [];
+            drawChart(chartResultData);
+
+          case 7:
           case "end":
             return _context.stop();
         }
