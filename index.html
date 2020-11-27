@@ -6,7 +6,9 @@
     <title>Document</title>
 </head>
 <body>
+    <script src="./dist/bundle.js"></script>
     <link rel="stylesheet" href="./src/stylesheets/main.css">
+    <link rel="stylesheet" href="./src/stylesheets/modal.scss">
     <section class="header">
         <div class="title">
             <h1>CryptoMarket</h1>
@@ -17,11 +19,38 @@
         <input placeHolder="SEARCH BAR">
     </div>
 
+    
+    <div id="modal">
+        <div class="modal-background">
+            <div class="about-modal">
+                <h1>Welcome to CryptoMarket</h1>
+                <div class='content'>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
+                    aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                    occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
+                    aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                    occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </div>
+                <div class="modal-footer">
+                    <button id='close-modal'>Let's Go!</button>
+                    <div class="modal-icons">
+                        <p>Built by Tri Ta</p>
+                        <a href="https://github.com/iamtreetop" target="_blank">GitHub Icon</a>
+                        <a href="https://www.linkedin.com/in/trivta/" target="_blank">LinkedIn Icon</a>
+                        <a href="https://angel.co/u/trivta" target="_blank">AngelList Icon</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <section class="main">
         <h1>BODY HERE</h1>
-        <div class="chart" id="chart"></div>
     </section>
 
-    <script src="./dist/bundle.js"></script>
+
 </body>
 </html>

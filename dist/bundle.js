@@ -14,7 +14,6 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _src_body__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/body */ "./src/body.js");
 /* harmony import */ var _src_currency_chart__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/currency/chart */ "./src/currency/chart.js");
-/* harmony import */ var _src_currency_chart__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_src_currency_chart__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
@@ -22,84 +21,97 @@ __webpack_require__.r(__webpack_exports__);
 
 var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
 
+ // import { openAbout } from './src/modal';
 
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("We connected"); // body();
+  console.log("We connected");
+  var closeModal = document.getElementById("close-modal"); // openAbout();
+  // body();
   // chart();
-  // const finnhubData = await fetch(
-  //     `https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=D&from=${Math.floor(past/1000)}&to=${Math.floor(today/1000)}&token=bu2clnn48v6uohsq5dd0`
-  // ).then(res => res.json());
-  // let chartResultData = [];
-  // for(let i=0; i<finnhubData.t.length; i++){
-  //     chartResultData.push({
-  //         date: new Date(finnhubData.t[i] * 1000),
-  //         high: finnhubData.h[i],
-  //         low: finnhubData.l[i],
-  //         open: finnhubData.o[i],
-  //         close: finnhubData.c[i],
-  //         volume: finnhubData.v[i]
+
+  closeModal.addEventListener("click", function () {
+    document.getElementById("modal").classList.add("hidden");
+  }); // fetch(apiUrl, { method: 'GET', mode: 'cors' })
+  // .then((resp) => {
+  //     debugger
+  //     return resp.json()})
+  //     .then((data) => {
+  //         // parseData(data);
+  //         debugger
+  //         drawChart(parseData(data.bpi));
   //     })
+  //     .catch((err) => {console.log(err)})
+  // const loadData = d3.csv('sample-data.csv')
+  // .then((data) => {
+  //     let chartResultData = [];
+  //     console.log("we in loadData")
+  //         debugger
+  //         for (let i in data) {
+  //             chartResultData.push({
+  //                 date: data[i].Date,
+  //                 high: Number(data[i].High),
+  //                 low: Number(data[i].Low),
+  //                 open: Number(data[i].Open),
+  //                 close: Number(data[i].Close),
+  //                 volume: Number(data[i].Volume)
+  //             })}
+  //         return chartResultData;
+  // });
+  // initializeChart(loadData);
+  // function initializeChart (data) {
+  //     console.log("we in initializeChart")
+  //     const margin = { top: 50, right: 50, bottom: 50, left: 50 };
+  //     const width = window.innerWidth - margin.left - margin.right;
+  //     const height = window.innerHeight - margin.top - margin.bottom; 
+  //     // add SVG to the page
+  //     debugger
+  //     const svg = d3
+  //         .select('#chart')
+  //         .append('svg')
+  //         .attr('width', width + margin['left'] + margin['right'])
+  //         .attr('height', height + margin['top'] + margin['bottom'])
+  //         .append('g')
+  //         .attr('transform', `translate(${margin['left']},  ${margin['top']})`);
+  //     // find data range
+  //     const xMin = d3.min(data, d => {return d['date'];});
+  //     const xMax = d3.max(data, d => {return d['date'];});
+  //     const yMin = d3.min(data, d => {return d['close'];});
+  //     const yMax = d3.max(data, d => {return d['close'];});
+  //     // scales for the charts
+  //     const xScale = d3
+  //         .scaleTime()
+  //         .domain([xMin, xMax])
+  //         .range([0, width]);
+  //     const yScale = d3
+  //         .scaleLinear()
+  //         .domain([yMin - 5, yMax])
+  //         .range([height, 0]);
+  //     // create the axes component
+  //     svg
+  //         .append('g')
+  //         .attr('id', 'xAxis')
+  //         .attr('transform', `translate(0, ${height})`)
+  //         .call(d3.axisBottom(xScale));
+  //     svg
+  //         .append('g')
+  //         .attr('id', 'yAxis')
+  //         .attr('transform', `translate(${width}, 0)`)
+  //         .call(d3.axisRight(yScale));
+  //     // generates close price line chart when called
+  //     const line = d3
+  //         .line()
+  //         .x(d => {return xScale(d['date']);})
+  //         .y(d => {return yScale(d['close']);});
+  //     // Append the path and bind data
+  //     svg
+  //         .append('path')
+  //         .data([data])
+  //         .style('fill', 'none')
+  //         .attr('id', 'priceChart')
+  //         .attr('stroke', 'steelblue')
+  //         .attr('stroke-width', '1.5')
+  //         .attr('d', line);
   // }
-
-  var loadData = d3.csv('sample-data.csv').then(function (data) {
-    var chartResultData = [];
-    debugger;
-
-    for (var i in data) {
-      chartResultData.push({
-        date: data[i].Date,
-        high: Number(data[i].High),
-        low: Number(data[i].Low),
-        open: Number(data[i].Open),
-        close: Number(data[i].Close),
-        volume: Number(data[i].Volume)
-      });
-    }
-
-    return chartResultData;
-  });
-  initializeChart(loadData);
-
-  function initializeChart(data) {
-    var margin = {
-      top: 50,
-      right: 50,
-      bottom: 50,
-      left: 50
-    };
-    var width = window.innerWidth - margin.left - margin.right;
-    var height = window.innerHeight - margin.top - margin.bottom; // add SVG to the page
-
-    debugger;
-    var svg = d3.select('#chart').append('svg').attr('width', width + margin['left'] + margin['right']).attr('height', height + margin['top'] + margin['bottom']).append('g').attr('transform', "translate(".concat(margin['left'], ",  ").concat(margin['top'], ")")); // find data range
-
-    var xMin = d3.min(data, function (d) {
-      return d['date'];
-    });
-    var xMax = d3.max(data, function (d) {
-      return d['date'];
-    });
-    var yMin = d3.min(data, function (d) {
-      return d['close'];
-    });
-    var yMax = d3.max(data, function (d) {
-      return d['close'];
-    }); // scales for the charts
-
-    var xScale = d3.scaleTime().domain([xMin, xMax]).range([0, width]);
-    var yScale = d3.scaleLinear().domain([yMin - 5, yMax]).range([height, 0]); // create the axes component
-
-    svg.append('g').attr('id', 'xAxis').attr('transform', "translate(0, ".concat(height, ")")).call(d3.axisBottom(xScale));
-    svg.append('g').attr('id', 'yAxis').attr('transform', "translate(".concat(width, ", 0)")).call(d3.axisRight(yScale)); // generates close price line chart when called
-
-    var line = d3.line().x(function (d) {
-      return xScale(d['date']);
-    }).y(function (d) {
-      return yScale(d['close']);
-    }); // Append the path and bind data
-
-    svg.append('path').data([data]).style('fill', 'none').attr('id', 'priceChart').attr('stroke', 'steelblue').attr('stroke-width', '1.5').attr('d', line);
-  }
 });
 
 /***/ }),
@@ -130,80 +142,42 @@ function body() {
 /*!*******************************!*\
   !*** ./src/currency/chart.js ***!
   \*******************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements:  */
-/***/ (() => {
+/*! namespace exports */
+/*! export default [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-// // const rp = require('request-promise');
-// const d3 = require('d3');
-// // export default async function chart(symbol) {
-// document.addEventListener("DOMContentLoaded", function(event) {
-//     console.log("we in chart")
-//     const apiUrl = `https://api.coindesk.com/v1/bpi/historical/close.json?start=2019-01-01&end=2019-12-31`
-//     fetch(apiUrl, { method: 'GET', mode: 'cors' })
-//     .then((resp) => {
-//         return resp.json()})
-//         .then((data) => {
-//             // parseData(data);
-//             debugger
-//             drawChart(parseData(data.bpi));
-//         })
-//         .catch((err) => {console.log(err)})
-//         // console.log(coindeskData)
-//     let chartResultData = [];
-//     function parseData (data) 
-//     { debugger
-//         for (let i in data) {
-//             chartResultData.push({
-//                 date: new Date(i),
-//                 value: +data[i]
-//             })
-//         }
-//     }
-//     // drawChart(chartResultData);
-//     function drawChart(data) {
-//         const svgWidth = 600, svgHeight = 400;
-//         const margin = {top: 20, right: 20, bottom: 30, left: 50};
-//         const width = svgWidth - margin.left - margin.right;
-//         const height = svgHeight - margin.top -margin.bottom;
-//         const svg = d3.select('svg')
-//             .attr("width", svgWidth)
-//             .attr("height", svgHeight)
-//         const g = svg.append("g")
-//             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-//         const x = d3.scaleTime()
-//             .rangeRound([0, width]);
-//         const y = d3.scaleLinear()
-//             .rangeRound([height, 0]);
-//         const line = d3.line()
-//             .x(function(d) {return x(d.date)})
-//             .y(function(d) {return y(d.value)})
-//             x.domain(d3.extent,{data, function(d) {return d.date}});
-//             y.domain(d3.extent,{data, function(d) {return d.value}});
-//         g.append("g")
-//             .attr("transform", "translate{0, " + height + "}")
-//             .call(d3.axisBottom(x))
-//             .select(".domain")
-//             .remove();
-//         g.append("g")
-//             .call(d3.axisLeft(y))
-//             .append("text")
-//             .attr("fill", "#000")
-//             .attr("transform", "rotate(-90)")
-//             .attr("y", 6)
-//             .attr("dy", "0.71em")
-//             .attr("text-anchor", "end")
-//             .text("Price ($)");
-//         g.append("path")
-//             .datum(data)
-//             .attr("fill", "none")
-//             .attr("stroke", "steelblue")
-//             .attr("stroke-linejoin", "round")
-//             .attr("stroke-linecap", "round")
-//             .attr("stroke-width", 1.5)
-//             .attr("d", line)
-//     }
-// })
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => /* binding */ chart
+/* harmony export */ });
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+// const rp = require('request-promise');
+var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
+
+function chart(_x) {
+  return _chart.apply(this, arguments);
+}
+
+function _chart() {
+  _chart = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(symbol) {
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _chart.apply(this, arguments);
+}
 
 /***/ }),
 
