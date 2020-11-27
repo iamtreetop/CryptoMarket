@@ -7,10 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("We connected")
     // body();
     // chart();
-    const duration = 4000;
-    const today = + new Date();
-    const past = (today - 7776000000); 
-    
+
     // const finnhubData = await fetch(
     //     `https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=D&from=${Math.floor(past/1000)}&to=${Math.floor(today/1000)}&token=bu2clnn48v6uohsq5dd0`
     // ).then(res => res.json());
@@ -28,20 +25,20 @@ document.addEventListener("DOMContentLoaded", () => {
     //     })
     // }
 
-
     const loadData = d3.csv('sample-data.csv')
         .then((data) => {
+            let chartResultData = [];
             debugger
-            const chartResultsData = data['chart']['result'][0];
-            const quoteData = chartResultsData['indicators']['quote'][0];
-            return chartResultsData['timestamp'].map((time, index) => ({
-                date: new Date(time * 1000),
-                high: quoteData['high'][index],
-                low: quoteData['low'][index],
-                open: quoteData['open'][index],
-                close: quoteData['close'][index],
-                volume: quoteData['volume'][index]
-        }));
+            for (let i in data) {
+                chartResultData.push({
+                    date: data[i].Date,
+                    high: Number(data[i].High),
+                    low: Number(data[i].Low),
+                    open: Number(data[i].Open),
+                    close: Number(data[i].Close),
+                    volume: Number(data[i].Volume)
+                })}
+            return chartResultData;
     });
 
     initializeChart(loadData);
@@ -51,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const width = window.innerWidth - margin.left - margin.right;
         const height = window.innerHeight - margin.top - margin.bottom; 
         // add SVG to the page
-        // debugger
+        debugger
         const svg = d3
             .select('#chart')
             .append('svg')

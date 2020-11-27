@@ -1,0 +1,12 @@
+body {
+  background: #00151c;
+  color: white;
+}
+
+.main {
+  height: 750px;
+  width: 1000px;
+  border: 2px solid greenyellow;
+  background: #0e3040;
+  color: #67809f;
+}
