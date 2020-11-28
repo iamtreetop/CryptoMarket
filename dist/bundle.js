@@ -178,33 +178,33 @@ document.addEventListener("DOMContentLoaded", function () {
       return yScale(d['close']);
     }); // Append the path and bind data
 
-    svg.append('path').data([data]).style('fill', 'none').attr('id', 'priceChart').attr('stroke', 'steelblue').attr('stroke-width', '1.5').attr('d', line);
+    svg.append('path').data([data]).style('fill', 'none').attr('id', 'priceChart').attr('stroke', 'yellowgreen').attr('stroke-width', '1.5').attr('d', line);
+
+    var movingAverage = function movingAverage(data, numPricePoints) {
+      return data.map(function (row, index, total) {
+        var start = Math.max(0, index - numPricePoints);
+        var end = index;
+        var subset = total.slice(start, end + 1);
+        var sum = subset.reduce(function (a, b) {
+          return a + b['close'];
+        }, 0);
+        return {
+          date: row['date'],
+          average: sum / subset.length
+        };
+      });
+    }; // calculates simple moving average over 50 days
+
+
+    var movingAverageData = movingAverage(data, 49); // generates moving average curve when called
+
+    var movingAverageLine = d3.line().x(function (d) {
+      return xScale(d['date']);
+    }).y(function (d) {
+      return yScale(d['average']);
+    }).curve(d3.curveBasis);
+    svg.append('path').data([movingAverageData]).style('fill', 'none').attr('id', 'movingAverageLine').attr('stroke', '#FF8900').attr('d', movingAverageLine);
   }
-
-  var movingAverage = function movingAverage(data, numberOfPricePoints) {
-    return data.map(function (row, index, total) {
-      var start = Math.max(0, index - numberOfPricePoints);
-      var end = index;
-      var subset = total.slice(start, end + 1);
-      var sum = subset.reduce(function (a, b) {
-        return a + b['close'];
-      }, 0);
-      return {
-        date: row['date'],
-        average: sum / subset.length
-      };
-    });
-  }; // calculates simple moving average over 50 days
-
-
-  var movingAverageData = movingAverage(data, 49); // generates moving average curve when called
-
-  var movingAverageLine = d3.line().x(function (d) {
-    return xScale(d['date']);
-  }).y(function (d) {
-    return yScale(d['average']);
-  }).curve(d3.curveBasis);
-  svg.append('path').data([movingAverageData]).style('fill', 'none').attr('id', 'movingAverageLine').attr('stroke', '#FF8900').attr('d', movingAverageLine);
 });
 
 /***/ }),

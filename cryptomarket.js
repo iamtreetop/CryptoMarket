@@ -190,44 +190,46 @@ document.addEventListener("DOMContentLoaded", () => {
             .data([data])
             .style('fill', 'none')
             .attr('id', 'priceChart')
-            .attr('stroke', 'steelblue')
+            .attr('stroke', 'yellowgreen')
             .attr('stroke-width', '1.5')
             .attr('d', line);
+
+        const movingAverage = (data, numPricePoints) => {
+        return data.map((row, index, total) => {
+            const start = Math.max(0, index - numPricePoints);
+            const end = index;
+            const subset = total.slice(start, end + 1);
+            const sum = subset.reduce((a, b) => {
+                return a + b['close'];
+                }, 0);
+                return {
+                    date: row['date'],
+                    average: sum / subset.length
+                };
+            });
+        };
+    
+        // calculates simple moving average over 50 days
+        const movingAverageData = movingAverage(data, 49);
+        // generates moving average curve when called
+        const movingAverageLine = d3
+            .line()
+            .x(d => {
+                return xScale(d['date']);
+            })
+            .y(d => {
+                return yScale(d['average']);
+            })
+            .curve(d3.curveBasis);
+        svg
+            .append('path')
+            .data([movingAverageData])
+            .style('fill', 'none')
+            .attr('id', 'movingAverageLine')
+            .attr('stroke', '#FF8900')
+            .attr('d', movingAverageLine);
+
+
+            
     }
-
-    // const movingAverage = (data, numberOfPricePoints) => {
-    // return data.map((row, index, total) => {
-    //     const start = Math.max(0, index - numberOfPricePoints);
-    //     const end = index;
-    //     const subset = total.slice(start, end + 1);
-    //     const sum = subset.reduce((a, b) => {
-    //         return a + b['close'];
-    //         }, 0);
-    //         return {
-    //             date: row['date'],
-    //             average: sum / subset.length
-    //         };
-    //     });
-    // };
-
-    // // calculates simple moving average over 50 days
-    // const movingAverageData = movingAverage(data, 49);
-    // // generates moving average curve when called
-    // const movingAverageLine = d3
-    //     .line()
-    //     .x(d => {
-    //         return xScale(d['date']);
-    //     })
-    //     .y(d => {
-    //         return yScale(d['average']);
-    //     })
-    //     .curve(d3.curveBasis);
-    // svg
-    //     .append('path')
-    //     .data([movingAverageData])
-    //     .style('fill', 'none')
-    //     .attr('id', 'movingAverageLine')
-    //     .attr('stroke', '#FF8900')
-    //     .attr('d', movingAverageLine);
-
 })
