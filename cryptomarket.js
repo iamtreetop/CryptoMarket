@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const margin = { top: 50, right: 50, bottom: 50, left: 50 };
         const width = window.innerWidth - margin.left - margin.right;
-        const height = 450 - margin.top - margin.bottom; 
+        const height = 600 - margin.top - margin.bottom; 
         // add SVG to the page
         
         const svg = d3
@@ -229,7 +229,132 @@ document.addEventListener("DOMContentLoaded", () => {
             .attr('stroke', '#FF8900')
             .attr('d', movingAverageLine);
 
+    // // /* Volume series bars */
+    // const volData = data.filter(d => d['volume'] !== null && d['volume']   !== 0);
+    // const yMinVolume = d3.min(volData, d => {
+    //     return Math.min(d['volume']);
+    // });
+    // const yMaxVolume = d3.max(volData, d => {
+    //     return Math.max(d['volume']);
+    // });
+    // const yVolumeScale = d3
+    //     .scaleLinear()
+    //     .domain([yMinVolume, yMaxVolume])
+    //     .range([height, 0]);
 
-            
+    // svg
+    //     .selectAll()
+    //     .data(volData)
+    //     .enter()
+    //     .append('rect')
+    //     .attr('x', d => {
+    //         return xScale(d['date']);
+    //     })
+    //     .attr('y', d => {
+    //         return yVolumeScale(d['volume']);
+    //     })
+    //     .attr('fill', (d, i) => {
+    //         if (i === 0) {
+    //             return '#03a678';
+    //         } else {  
+    //             return volData[i - 1].close > d.close ? '#c0392b' : '#03a678'; 
+    //         }
+    //     })
+    //     .attr('width', 1)
+    //     .attr('height', d => {
+    //         return height - yVolumeScale(d['volume']);
+    //     });
+
+    // renders x and y crosshair
+    const focus = svg
+        .append('g')
+        .attr('class', 'focus')
+        .style('display', 'none');
+    focus.append('circle').attr('r', 4.5);
+    focus.append('line').classed('x', true);
+    focus.append('line').classed('y', true);
+    svg
+        .append('rect')
+        .attr('class', 'overlay')
+        .attr('width', width)
+        .attr('height', height)
+        .on('mouseover', () => focus.style('display', null))
+        .on('mouseout', () => focus.style('display', 'none'))
+        .on('mousemove', generateCrosshair);
+    d3.select('.overlay').style('fill', 'none');
+    d3.select('.overlay').style('pointer-events', 'all');
+    d3.selectAll('.focus line').style('fill', 'none');
+    d3.selectAll('.focus line').style('stroke', '#67809f');
+    d3.selectAll('.focus line').style('stroke-width', '1.5px');
+    d3.selectAll('.focus line').style('stroke-dasharray', '3 3');
+
+    const bisectDate = d3.bisector(d => d.date).left;
+    
+    // crosshairs
+    function generateCrosshair(e) {
+        //returns corresponding value from the domain
+        // debugger
+        const correspondingDate = xScale.invert(d3.pointer(e)[0]);
+        //gets insertion point
+        const i = bisectDate(data, correspondingDate, 1);
+        const d0 = data[i - 1];
+        const d1 = data[i];
+        const currentPoint = correspondingDate - d0['date'] > d1['date'] - correspondingDate ? d1 : d0;
+        
+        focus.attr(
+            'transform',
+            `translate(${xScale(currentPoint['date'])}, ${yScale(
+                currentPoint['close']
+            )})`
+        );
+        focus
+            .select('line.x')
+            .attr('x1', 0)
+            .attr('x2', width - xScale(currentPoint['date']))
+            .attr('y1', 0)
+            .attr('y2', 0);
+        focus
+            .select('line.y')
+            .attr('x1', 0)
+            .attr('x2', 0)
+            .attr('y1', 0)
+            .attr('y2', height - yScale(currentPoint['close']));
+        updateLegends(currentPoint);
+    }
+
+    // Legends
+    const updateLegends = (currentData) => {
+        d3.selectAll('.lineLegend').remove();
+
+        const legendKeys = Object.keys(data[0]);
+        const lineLegend = svg
+            .selectAll('.lineLegend')
+            .data(legendKeys)
+            .enter()
+            .append('g')
+            .attr('class', 'lineLegend')
+            .attr('transform', (d, i) => {
+                return `translate(0, ${i * 20})`;
+            });
+
+        lineLegend
+            .append('text')
+            .text(d => {
+                if (d === 'date') {
+                    return `${d}: ${currentData[d].toLocaleDateString()}`;
+                } else if (
+                    d === 'high' ||
+                    d === 'low' ||
+                    d === 'open' ||
+                    d === 'close'
+                ) {
+                    return `${d}: ${currentData[d].toFixed(2)}`;
+                } else {
+                    return `${d}: ${currentData[d]}`;
+                }
+            })
+            .style('fill', 'white')
+            .attr('transform', 'translate(15,9)'); //align texts with boxes
+        };
     }
 })

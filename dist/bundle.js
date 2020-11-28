@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
       left: 50
     };
     var width = window.innerWidth - margin.left - margin.right;
-    var height = 450 - margin.top - margin.bottom; // add SVG to the page
+    var height = 600 - margin.top - margin.bottom; // add SVG to the page
 
     var svg = d3.select('#chart').append('svg').attr('width', width + margin['left'] + margin['right']).attr('height', height + margin['top'] + margin['bottom']).call(responsivefy).append('g').attr('transform', "translate(".concat(margin['left'], ",  ").concat(margin['top'], ")")); // find data range
 
@@ -203,7 +203,93 @@ document.addEventListener("DOMContentLoaded", function () {
     }).y(function (d) {
       return yScale(d['average']);
     }).curve(d3.curveBasis);
-    svg.append('path').data([movingAverageData]).style('fill', 'none').attr('id', 'movingAverageLine').attr('stroke', '#FF8900').attr('d', movingAverageLine);
+    svg.append('path').data([movingAverageData]).style('fill', 'none').attr('id', 'movingAverageLine').attr('stroke', '#FF8900').attr('d', movingAverageLine); // // /* Volume series bars */
+    // const volData = data.filter(d => d['volume'] !== null && d['volume']   !== 0);
+    // const yMinVolume = d3.min(volData, d => {
+    //     return Math.min(d['volume']);
+    // });
+    // const yMaxVolume = d3.max(volData, d => {
+    //     return Math.max(d['volume']);
+    // });
+    // const yVolumeScale = d3
+    //     .scaleLinear()
+    //     .domain([yMinVolume, yMaxVolume])
+    //     .range([height, 0]);
+    // svg
+    //     .selectAll()
+    //     .data(volData)
+    //     .enter()
+    //     .append('rect')
+    //     .attr('x', d => {
+    //         return xScale(d['date']);
+    //     })
+    //     .attr('y', d => {
+    //         return yVolumeScale(d['volume']);
+    //     })
+    //     .attr('fill', (d, i) => {
+    //         if (i === 0) {
+    //             return '#03a678';
+    //         } else {  
+    //             return volData[i - 1].close > d.close ? '#c0392b' : '#03a678'; 
+    //         }
+    //     })
+    //     .attr('width', 1)
+    //     .attr('height', d => {
+    //         return height - yVolumeScale(d['volume']);
+    //     });
+    // renders x and y crosshair
+
+    var focus = svg.append('g').attr('class', 'focus').style('display', 'none');
+    focus.append('circle').attr('r', 4.5);
+    focus.append('line').classed('x', true);
+    focus.append('line').classed('y', true);
+    svg.append('rect').attr('class', 'overlay').attr('width', width).attr('height', height).on('mouseover', function () {
+      return focus.style('display', null);
+    }).on('mouseout', function () {
+      return focus.style('display', 'none');
+    }).on('mousemove', generateCrosshair);
+    d3.select('.overlay').style('fill', 'none');
+    d3.select('.overlay').style('pointer-events', 'all');
+    d3.selectAll('.focus line').style('fill', 'none');
+    d3.selectAll('.focus line').style('stroke', '#67809f');
+    d3.selectAll('.focus line').style('stroke-width', '1.5px');
+    d3.selectAll('.focus line').style('stroke-dasharray', '3 3');
+    var bisectDate = d3.bisector(function (d) {
+      return d.date;
+    }).left; // crosshairs
+
+    function generateCrosshair(e) {
+      //returns corresponding value from the domain
+      // debugger
+      var correspondingDate = xScale.invert(d3.pointer(e)[0]); //gets insertion point
+
+      var i = bisectDate(data, correspondingDate, 1);
+      var d0 = data[i - 1];
+      var d1 = data[i];
+      var currentPoint = correspondingDate - d0['date'] > d1['date'] - correspondingDate ? d1 : d0;
+      focus.attr('transform', "translate(".concat(xScale(currentPoint['date']), ", ").concat(yScale(currentPoint['close']), ")"));
+      focus.select('line.x').attr('x1', 0).attr('x2', width - xScale(currentPoint['date'])).attr('y1', 0).attr('y2', 0);
+      focus.select('line.y').attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', height - yScale(currentPoint['close']));
+      updateLegends(currentPoint);
+    } // Legends
+
+
+    var updateLegends = function updateLegends(currentData) {
+      d3.selectAll('.lineLegend').remove();
+      var legendKeys = Object.keys(data[0]);
+      var lineLegend = svg.selectAll('.lineLegend').data(legendKeys).enter().append('g').attr('class', 'lineLegend').attr('transform', function (d, i) {
+        return "translate(0, ".concat(i * 20, ")");
+      });
+      lineLegend.append('text').text(function (d) {
+        if (d === 'date') {
+          return "".concat(d, ": ").concat(currentData[d].toLocaleDateString());
+        } else if (d === 'high' || d === 'low' || d === 'open' || d === 'close') {
+          return "".concat(d, ": ").concat(currentData[d].toFixed(2));
+        } else {
+          return "".concat(d, ": ").concat(currentData[d]);
+        }
+      }).style('fill', 'white').attr('transform', 'translate(15,9)'); //align texts with boxes
+    };
   }
 });
 
