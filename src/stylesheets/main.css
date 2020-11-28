@@ -1,6 +1,9 @@
 body {
   background: #00151c;
   color: white;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
 }
 
 .main {
@@ -9,6 +12,11 @@ body {
   border: 2px solid greenyellow;
   background: #0e3040;
   color: #67809f;
+}
+
+.title {
+  font-family: 'Miriam Libre', sans-serif;
+  font-size: 28px;
 }
 
 .hidden {
@@ -21,11 +29,25 @@ body {
   bottom: 0;
   right: 0;
   left: 0;
-  background: rgba(255, 255, 255, 0.555);
+  background: #c0c0c07d;
   /* border: 2px solid red; */
   z-index: 10;
   backdrop-filter: blur(3px);
-  transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease-out;
+}
+
+.animate-modal {
+  animation: show 0.8s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes show {
+  0% {
+    opacity: 1
+  }
+  100% {
+    opacity: 0
+  }
 }
 
 .modal-background{
@@ -34,6 +56,7 @@ body {
   align-items: center;
   height: 100%;
   width: 100%;
+  transition: opacity 0.5s ease;
 }
 
 .about-modal{
@@ -42,10 +65,15 @@ body {
   justify-content: space-between;
   padding: 30px;
   border-radius: 2px 40px 2px 40px;
-  height: 60%;
-  width: 50%;
+  height: 50%;
+  width: 45%;
   background: rgb(49, 46, 46);
   color: white;
+  transition: opacity 0.5s ease;
+}
+
+.about-modal {
+  font-family: 'Miriam Libre', sans-serif;
   transition: opacity 0.5s ease;
 }
 
@@ -56,6 +84,14 @@ body {
 
 .modal-icons {
   display: flex;
+}
+
+.modal-icons > p {
+  font-size: 18px;
+  margin: 14px 10px 0 0;
+}
+
+.modal-icons > a {
   cursor: pointer;
   outline: none;
 }
@@ -71,4 +107,8 @@ body {
   transition: all 0.5s ease;
   cursor: pointer;
   outline: none;
+}
+
+#close-modal:hover {
+  text-decoration: underline;
 }

@@ -16,6 +16,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _src_currency_chart__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/currency/chart */ "./src/currency/chart.js");
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2__);
+var _this = undefined;
+
 
 
 
@@ -24,13 +26,20 @@ var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
  // import { openAbout } from './src/modal';
 
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("We connected");
-  var closeModal = document.getElementById("close-modal"); // openAbout();
+  console.log("We connected"); // openAbout();
   // body();
   // chart();
 
-  closeModal.addEventListener("click", function () {
-    document.getElementById("modal").classList.add("hidden");
+  var closeModal = document.getElementById('modal');
+  document.querySelector('#close-modal').addEventListener('click', function () {
+    closeModal.classList.add('animate-modal');
+  });
+  closeModal.addEventListener('animationend', function () {
+    if (_this.classList.contains('animate-modal')) {
+      _this.style.display = 'none';
+
+      _this.classList.remove('animate-modal');
+    }
   }); // fetch(apiUrl, { method: 'GET', mode: 'cors' })
   // .then((resp) => {
   //     debugger

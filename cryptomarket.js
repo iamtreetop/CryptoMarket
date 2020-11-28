@@ -6,15 +6,26 @@ import 'regenerator-runtime/runtime'
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("We connected")
-    let closeModal = document.getElementById("close-modal");
     
     // openAbout();
     // body();
     // chart();
-    closeModal.addEventListener("click", () => {
-        document.getElementById("modal").classList.add("hidden");
+
+    const closeModal = document.getElementById('modal');
+
+    document.querySelector('#close-modal').addEventListener('click', () => {
+        closeModal.classList.add('animate-modal');
     })
 
+    closeModal.addEventListener('animationend', () => {
+        if (this.classList.contains('animate-modal')) {
+            this.style.display = 'none';
+            this.classList.remove('animate-modal')
+        }
+    });
+    
+
+    
     // fetch(apiUrl, { method: 'GET', mode: 'cors' })
     // .then((resp) => {
     //     debugger
