@@ -41,21 +41,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
   });
-  var loadData = d3.json('sample-data.json').then(function (data) {
-    var chartResultsData = data['chart']['result'][0];
-    var quoteData = chartResultsData['indicators']['quote'][0];
-    return chartResultsData['timestamp'].map(function (time, index) {
+  var loadData = d3.json('sample-crypto.json') // https://api.cryptowat.ch/markets/coinbase-pro/btcusd/ohlc    
+  .then(function (data) {
+    debugger;
+    var chartResultsData = data['result']['86400']; // const quoteData = chartResultsData['indicators']['quote'][0];
+    // return chartResultsData['timestamp'].map((time, index) => ({
+
+    return chartResultsData.map(function (detail, index) {
       return {
-        date: new Date(time * 1000),
-        high: quoteData['high'][index],
-        low: quoteData['low'][index],
-        open: quoteData['open'][index],
-        close: quoteData['close'][index],
-        volume: quoteData['volume'][index]
+        date: detail[0],
+        high: detail[2],
+        low: detail[3],
+        open: detail[1],
+        close: detail[4],
+        volume: detail[5]
       };
     });
   });
   loadData.then(function (data) {
+    debugger;
     initializeChart(data);
   }); // body();
   // chart();
@@ -129,7 +133,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // api docs: https://github.com/mbostock/d3/wiki/Selections#on
 
     d3.select(window).on('resize.' + container.attr('id'), resize);
-  };
+  }; // Kudos to Wen Tjun https://wentjun.com/
+
 
   function initializeChart(data) {
     console.log("we in initializeChart"); // data = data.filter(

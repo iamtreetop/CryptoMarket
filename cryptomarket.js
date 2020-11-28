@@ -22,22 +22,26 @@ document.addEventListener("DOMContentLoaded", () => {
         } 
     });
     
-    const loadData = d3.json('sample-data.json')
-        .then(data => {
-        const chartResultsData = data['chart']['result'][0];
-        const quoteData = chartResultsData['indicators']['quote'][0];
-
-        return chartResultsData['timestamp'].map((time, index) => ({
-            date: new Date(time * 1000),
-            high: quoteData['high'][index],
-            low: quoteData['low'][index],
-            open: quoteData['open'][index],
-            close: quoteData['close'][index],
-            volume: quoteData['volume'][index]
+    const loadData = d3.json('sample-crypto.json')
+    // https://api.cryptowat.ch/markets/coinbase-pro/btcusd/ohlc    
+    .then(data => {
+            debugger
+        const chartResultsData = data['result']['86400'];
+        // const quoteData = chartResultsData['indicators']['quote'][0];
+        
+        // return chartResultsData['timestamp'].map((time, index) => ({
+        return chartResultsData.map((detail, index) => ({
+            date: detail[0],
+            high: detail[2],
+            low: detail[3],
+            open: detail[1],
+            close: detail[4],
+            volume: detail[5]
         }));
-     });
+    });
 
     loadData.then((data) => {
+        debugger
         initializeChart(data);
     });
 
@@ -122,6 +126,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // api docs: https://github.com/mbostock/d3/wiki/Selections#on
         d3.select(window).on('resize.' + container.attr('id'), resize);
     };
+
+    // Kudos to Wen Tjun https://wentjun.com/
 
     function initializeChart (data) {
         console.log("we in initializeChart")
