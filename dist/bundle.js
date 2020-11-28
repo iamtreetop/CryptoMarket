@@ -23,24 +23,43 @@ var _this = undefined;
 
 var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
 
- // import { openAbout } from './src/modal';
 
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("We connected"); // openAbout();
-  // body();
-  // chart();
-
+  console.log("We connected");
   var closeModal = document.getElementById('modal');
   document.querySelector('#close-modal').addEventListener('click', function () {
     closeModal.classList.add('animate-modal');
+    setTimeout(function () {
+      closeModal.classList.add("hidden");
+    }, 1000);
   });
   closeModal.addEventListener('animationend', function () {
     if (_this.classList.contains('animate-modal')) {
       _this.style.display = 'none';
 
-      _this.classList.remove('animate-modal');
+      _this.classList.remove('animate-modal'); // closeModal.classList.add("hidden"); 
+
     }
-  }); // fetch(apiUrl, { method: 'GET', mode: 'cors' })
+  });
+  var loadData = d3.json('sample-data.json').then(function (data) {
+    var chartResultsData = data['chart']['result'][0];
+    var quoteData = chartResultsData['indicators']['quote'][0];
+    return chartResultsData['timestamp'].map(function (time, index) {
+      return {
+        date: new Date(time * 1000),
+        high: quoteData['high'][index],
+        low: quoteData['low'][index],
+        open: quoteData['open'][index],
+        close: quoteData['close'][index],
+        volume: quoteData['volume'][index]
+      };
+    });
+  });
+  loadData.then(function (data) {
+    initializeChart(data);
+  }); // body();
+  // chart();
+  // fetch(apiUrl, { method: 'GET', mode: 'cors' })
   // .then((resp) => {
   //     debugger
   //     return resp.json()})
@@ -50,12 +69,12 @@ document.addEventListener("DOMContentLoaded", function () {
   //         drawChart(parseData(data.bpi));
   //     })
   //     .catch((err) => {console.log(err)})
-  // const loadData = d3.csv('sample-data.csv')
+  // d3.csv('sample-data.csv')
   // .then((data) => {
   //     let chartResultData = [];
   //     console.log("we in loadData")
   //         debugger
-  //         for (let i in data) {
+  //         for (let i=0; i < data.length; i++) {
   //             chartResultData.push({
   //                 date: data[i].Date,
   //                 high: Number(data[i].High),
@@ -64,63 +83,128 @@ document.addEventListener("DOMContentLoaded", function () {
   //                 close: Number(data[i].Close),
   //                 volume: Number(data[i].Volume)
   //             })}
-  //         return chartResultData;
+  //         initializeChart(chartResultData);
   // });
-  // initializeChart(loadData);
-  // function initializeChart (data) {
-  //     console.log("we in initializeChart")
-  //     const margin = { top: 50, right: 50, bottom: 50, left: 50 };
-  //     const width = window.innerWidth - margin.left - margin.right;
-  //     const height = window.innerHeight - margin.top - margin.bottom; 
-  //     // add SVG to the page
-  //     debugger
-  //     const svg = d3
-  //         .select('#chart')
-  //         .append('svg')
-  //         .attr('width', width + margin['left'] + margin['right'])
-  //         .attr('height', height + margin['top'] + margin['bottom'])
-  //         .append('g')
-  //         .attr('transform', `translate(${margin['left']},  ${margin['top']})`);
-  //     // find data range
-  //     const xMin = d3.min(data, d => {return d['date'];});
-  //     const xMax = d3.max(data, d => {return d['date'];});
-  //     const yMin = d3.min(data, d => {return d['close'];});
-  //     const yMax = d3.max(data, d => {return d['close'];});
-  //     // scales for the charts
-  //     const xScale = d3
-  //         .scaleTime()
-  //         .domain([xMin, xMax])
-  //         .range([0, width]);
-  //     const yScale = d3
-  //         .scaleLinear()
-  //         .domain([yMin - 5, yMax])
-  //         .range([height, 0]);
-  //     // create the axes component
-  //     svg
-  //         .append('g')
-  //         .attr('id', 'xAxis')
-  //         .attr('transform', `translate(0, ${height})`)
-  //         .call(d3.axisBottom(xScale));
-  //     svg
-  //         .append('g')
-  //         .attr('id', 'yAxis')
-  //         .attr('transform', `translate(${width}, 0)`)
-  //         .call(d3.axisRight(yScale));
-  //     // generates close price line chart when called
-  //     const line = d3
-  //         .line()
-  //         .x(d => {return xScale(d['date']);})
-  //         .y(d => {return yScale(d['close']);});
-  //     // Append the path and bind data
-  //     svg
-  //         .append('path')
-  //         .data([data])
-  //         .style('fill', 'none')
-  //         .attr('id', 'priceChart')
-  //         .attr('stroke', 'steelblue')
-  //         .attr('stroke-width', '1.5')
-  //         .attr('d', line);
+  // let url = ("sample-data.json")
+  // loadData(url);
+  // function loadData(url) {
+  //     let data = [];
+  //     // debugger
+  //     let xhr = new XMLHttpRequest();
+  //     xhr.onreadystatechange = function (e) {
+  //         debugger
+  //         if (xhr.readyState === 4 && xhr.status === 200) {
+  //             debugger
+  //             let resp = JSON.stringify(xhr.responseText);
+  //             let output = JSON.parse(resp);
+  //             for (let i = 0; i < output.length; i++) {
+  //                 data.push(output[i]);
+  //             }
+  //         }
+  //     };
+  //     xhr.open('GET', url, true);
+  //     xhr.send()
+  //     initializeChart(data)
+  //     //  true lets you render the data right away
   // }
+
+  var responsivefy = function responsivefy(svg) {
+    // get container + svg aspect ratio
+    var container = d3.select(svg.node().parentNode),
+        width = parseInt(svg.style('width')),
+        height = parseInt(svg.style('height')),
+        aspect = width / height; // get width of container and resize svg to fit it
+
+    var resize = function resize() {
+      var targetWidth = parseInt(container.style('width'));
+      svg.attr('width', targetWidth);
+      svg.attr('height', Math.round(targetWidth / aspect));
+    }; // add viewBox and preserveAspectRatio properties,
+    // and call resize so that svg resizes on inital page load
+
+
+    svg.attr('viewBox', '0 0 ' + width + ' ' + height).attr('perserveAspectRatio', 'xMinYMid').call(resize); // to register multiple listeners for same event type,
+    // you need to add namespace, i.e., 'click.foo'
+    // necessary if you call invoke this function for multiple svgs
+    // api docs: https://github.com/mbostock/d3/wiki/Selections#on
+
+    d3.select(window).on('resize.' + container.attr('id'), resize);
+  };
+
+  function initializeChart(data) {
+    console.log("we in initializeChart"); // data = data.filter(
+    //     row => row['high'] && row['low'] && row['close'] && row['open']
+    // );
+    // thisYearStartDate = new Date(2018, 0, 1);
+    // data = data.filter(row => {
+    //     if (row['date']) {
+    //         return row['date'] >= thisYearStartDate;
+    //     }
+    // });
+
+    var margin = {
+      top: 50,
+      right: 50,
+      bottom: 50,
+      left: 50
+    };
+    var width = window.innerWidth - margin.left - margin.right;
+    var height = 450 - margin.top - margin.bottom; // add SVG to the page
+
+    var svg = d3.select('#chart').append('svg').attr('width', width + margin['left'] + margin['right']).attr('height', height + margin['top'] + margin['bottom']).call(responsivefy).append('g').attr('transform', "translate(".concat(margin['left'], ",  ").concat(margin['top'], ")")); // find data range
+
+    var xMin = d3.min(data, function (d) {
+      return d['date'];
+    });
+    var xMax = d3.max(data, function (d) {
+      return d['date'];
+    });
+    var yMin = d3.min(data, function (d) {
+      return d['close'];
+    });
+    var yMax = d3.max(data, function (d) {
+      return d['close'];
+    }); // scales for the charts
+
+    var xScale = d3.scaleTime().domain([xMin, xMax]).range([0, width]);
+    var yScale = d3.scaleLinear().domain([yMin - 5, yMax]).range([height, 0]); // create the axes component
+
+    svg.append('g').attr('id', 'xAxis').attr('transform', "translate(0, ".concat(height, ")")).call(d3.axisBottom(xScale));
+    svg.append('g').attr('id', 'yAxis').attr('transform', "translate(".concat(width, ", 0)")).call(d3.axisRight(yScale)); // generates close price line chart when called
+
+    var line = d3.line().x(function (d) {
+      return xScale(d['date']);
+    }).y(function (d) {
+      return yScale(d['close']);
+    }); // Append the path and bind data
+
+    svg.append('path').data([data]).style('fill', 'none').attr('id', 'priceChart').attr('stroke', 'steelblue').attr('stroke-width', '1.5').attr('d', line);
+  }
+
+  var movingAverage = function movingAverage(data, numberOfPricePoints) {
+    return data.map(function (row, index, total) {
+      var start = Math.max(0, index - numberOfPricePoints);
+      var end = index;
+      var subset = total.slice(start, end + 1);
+      var sum = subset.reduce(function (a, b) {
+        return a + b['close'];
+      }, 0);
+      return {
+        date: row['date'],
+        average: sum / subset.length
+      };
+    });
+  }; // calculates simple moving average over 50 days
+
+
+  var movingAverageData = movingAverage(data, 49); // generates moving average curve when called
+
+  var movingAverageLine = d3.line().x(function (d) {
+    return xScale(d['date']);
+  }).y(function (d) {
+    return yScale(d['average']);
+  }).curve(d3.curveBasis);
+  svg.append('path').data([movingAverageData]).style('fill', 'none').attr('id', 'movingAverageLine').attr('stroke', '#FF8900').attr('d', movingAverageLine);
 });
 
 /***/ }),

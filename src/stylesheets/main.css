@@ -6,14 +6,6 @@ body {
   font-weight: 300;
 }
 
-.main {
-  height: 750px;
-  width: 1000px;
-  border: 2px solid greenyellow;
-  background: #0e3040;
-  color: #67809f;
-}
-
 .title {
   font-family: 'Miriam Libre', sans-serif;
   font-size: 28px;
@@ -21,6 +13,7 @@ body {
 
 .hidden {
     display: none;
+    z-index: -10;
 }
 
 #modal {
@@ -69,7 +62,13 @@ body {
   width: 45%;
   background: rgb(49, 46, 46);
   color: white;
+  box-shadow: 5px 5px 10px 0 rgb(0 0 0 / 40%);
   transition: opacity 0.5s ease;
+}
+
+.content {
+  height: 212px;
+  overflow: auto;
 }
 
 .about-modal {
@@ -96,6 +95,11 @@ body {
   outline: none;
 }
 
+.modal-icons > a:hover {
+  box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.2);
+  /* border-radius: 10px; */
+}
+
 #close-modal {
   background-color: transparent;
   border: 1px solid white;
@@ -111,4 +115,6 @@ body {
 
 #close-modal:hover {
   text-decoration: underline;
+  box-shadow: 5px 5px 10px 0 rgb(0 0 0 / 40%);
+  transition: none;
 }
