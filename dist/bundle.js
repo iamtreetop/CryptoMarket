@@ -41,56 +41,63 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
   });
-  var loadData = d3.json('sample-crypto.json') // https://api.cryptowat.ch/markets/coinbase-pro/btcusd/ohlc    
+  var apiUrl = "https://cors-anywhere.herokuapp.com/https://api.cryptowat.ch/markets/coinbase-pro/btcusd/ohlc";
+  var loadData = d3.json('sample-crypto.json') // const loadData = fetch(apiUrl, { 
+  //         method: 'GET', 
+  //         // header: {"Access-Control-Allow-Origin": "*"},
+  //         mode: 'cors' 
+  //     })  
   .then(function (data) {
     debugger;
-    var chartResultsData = data['result']['86400']; // const quoteData = chartResultsData['indicators']['quote'][0];
-    // return chartResultsData['timestamp'].map((time, index) => ({
-
-    return chartResultsData.map(function (detail, index) {
+    var chartResultsData = data['result']['43200'];
+    return chartResultsData.map(function (detail, idx) {
       return {
-        date: detail[0],
+        date: new Date(detail[0] * 1000),
+        open: detail[1],
         high: detail[2],
         low: detail[3],
-        open: detail[1],
         close: detail[4],
         volume: detail[5]
       };
     });
-  });
+  }); // const loadData = fetch(apiUrl,{ method: 'GET', mode: 'cors' })
+  // .then((resp) => {
+  //     debugger
+  //     return resp.json
+  // })
+  // // const loadData = fetch(apiUrl, { method: 'GET', mode: 'cors' })  
+  // .then(data => {
+  //     const chartResultsData = data['result']['43200'];
+  //     return chartResultsData.map((detail, idx) => ({
+  //         date: new Date (detail[0] * 1000),
+  //         open: detail[1],
+  //         high: detail[2],
+  //         low: detail[3],
+  //         close: detail[4],
+  //         volume: detail[5]
+  //     }));
+  // });
+
   loadData.then(function (data) {
     debugger;
     initializeChart(data);
   }); // body();
   // chart();
-  // fetch(apiUrl, { method: 'GET', mode: 'cors' })
+  // const loadData = fetch(apiUrl, { method: 'GET', mode: 'cors' })
   // .then((resp) => {
   //     debugger
   //     return resp.json()})
   //     .then((data) => {
-  //         // parseData(data);
-  //         debugger
-  //         drawChart(parseData(data.bpi));
+  //      const chartResultsData = data['result']['43200']; //every day
+  //     return chartResultsData.map((detail, idx) => ({
+  //         date: new Date (detail[0] * 1000),
+  //         open: detail[1],
+  //         high: detail[2],
+  //         low: detail[3],
+  //         close: detail[4],
+  //         volume: detail[5]
   //     })
   //     .catch((err) => {console.log(err)})
-  // d3.csv('sample-data.csv')
-  // .then((data) => {
-  //     let chartResultData = [];
-  //     console.log("we in loadData")
-  //         debugger
-  //         for (let i=0; i < data.length; i++) {
-  //             chartResultData.push({
-  //                 date: data[i].Date,
-  //                 high: Number(data[i].High),
-  //                 low: Number(data[i].Low),
-  //                 open: Number(data[i].Open),
-  //                 close: Number(data[i].Close),
-  //                 volume: Number(data[i].Volume)
-  //             })}
-  //         initializeChart(chartResultData);
-  // });
-  // let url = ("sample-data.json")
-  // loadData(url);
   // function loadData(url) {
   //     let data = [];
   //     // debugger
@@ -148,13 +155,13 @@ document.addEventListener("DOMContentLoaded", function () {
     // });
 
     var margin = {
-      top: 50,
-      right: 50,
-      bottom: 50,
-      left: 50
+      top: 30,
+      right: 45,
+      bottom: 40,
+      left: 25
     };
-    var width = window.innerWidth - margin.left - margin.right;
-    var height = 600 - margin.top - margin.bottom; // add SVG to the page
+    var width = document.querySelector('#chart').offsetWidth - margin.left - margin.right;
+    var height = 400 - margin.top - margin.bottom; // add SVG to the page
 
     var svg = d3.select('#chart').append('svg').attr('width', width + margin['left'] + margin['right']).attr('height', height + margin['top'] + margin['bottom']).call(responsivefy).append('g').attr('transform', "translate(".concat(margin['left'], ",  ").concat(margin['top'], ")")); // find data range
 
@@ -183,7 +190,8 @@ document.addEventListener("DOMContentLoaded", function () {
       return yScale(d['close']);
     }); // Append the path and bind data
 
-    svg.append('path').data([data]).style('fill', 'none').attr('id', 'priceChart').attr('stroke', 'yellowgreen').attr('stroke-width', '1.5').attr('d', line);
+    svg.append('path').data([data]).style('fill', 'none').attr('id', 'priceChart').attr('stroke', '#8ecc54') // .attr('stroke', '#5cc7b2')
+    .attr('stroke-width', '1.5').attr('d', line);
 
     var movingAverage = function movingAverage(data, numPricePoints) {
       return data.map(function (row, index, total) {
@@ -208,7 +216,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }).y(function (d) {
       return yScale(d['average']);
     }).curve(d3.curveBasis);
-    svg.append('path').data([movingAverageData]).style('fill', 'none').attr('id', 'movingAverageLine').attr('stroke', '#FF8900').attr('d', movingAverageLine); // // /* Volume series bars */
+    svg.append('path').data([movingAverageData]).style('fill', 'none').attr('id', 'movingAverageLine') // .attr('stroke', '#FF8900') // orange
+    // .attr('stroke', '#f9ac70') // coral
+    .attr('stroke', '#f59c3e') // 
+    .attr('d', movingAverageLine); // // /* Volume series bars */
     // const volData = data.filter(d => d['volume'] !== null && d['volume']   !== 0);
     // const yMinVolume = d3.min(volData, d => {
     //     return Math.min(d['volume']);
@@ -265,7 +276,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function generateCrosshair(e) {
       //returns corresponding value from the domain
-      // debugger
+      debugger;
       var correspondingDate = xScale.invert(d3.pointer(e)[0]); //gets insertion point
 
       var i = bisectDate(data, correspondingDate, 1);
@@ -281,11 +292,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var updateLegends = function updateLegends(currentData) {
       d3.selectAll('.lineLegend').remove();
+      debugger;
       var legendKeys = Object.keys(data[0]);
       var lineLegend = svg.selectAll('.lineLegend').data(legendKeys).enter().append('g').attr('class', 'lineLegend').attr('transform', function (d, i) {
         return "translate(0, ".concat(i * 20, ")");
       });
       lineLegend.append('text').text(function (d) {
+        debugger;
+
         if (d === 'date') {
           return "".concat(d, ": ").concat(currentData[d].toLocaleDateString());
         } else if (d === 'high' || d === 'low' || d === 'open' || d === 'close') {

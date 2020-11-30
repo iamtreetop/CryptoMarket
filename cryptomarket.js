@@ -21,24 +21,45 @@ document.addEventListener("DOMContentLoaded", () => {
             // closeModal.classList.add("hidden"); 
         } 
     });
-    
+
+
+    const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.cryptowat.ch/markets/coinbase-pro/btcusd/ohlc`
     const loadData = d3.json('sample-crypto.json')
-    // https://api.cryptowat.ch/markets/coinbase-pro/btcusd/ohlc    
-    .then(data => {
+    // const loadData = fetch(apiUrl, { 
+    //         method: 'GET', 
+    //         // header: {"Access-Control-Allow-Origin": "*"},
+    //         mode: 'cors' 
+    //     })  
+        .then(data => {
             debugger
-        const chartResultsData = data['result']['86400'];
-        // const quoteData = chartResultsData['indicators']['quote'][0];
-        
-        // return chartResultsData['timestamp'].map((time, index) => ({
-        return chartResultsData.map((detail, index) => ({
-            date: detail[0],
-            high: detail[2],
-            low: detail[3],
-            open: detail[1],
-            close: detail[4],
-            volume: detail[5]
-        }));
+            const chartResultsData = data['result']['43200'];
+            return chartResultsData.map((detail, idx) => ({
+                date: new Date (detail[0] * 1000),
+                open: detail[1],
+                high: detail[2],
+                low: detail[3],
+                close: detail[4],
+                volume: detail[5]
+            })
+        );
     });
+    // const loadData = fetch(apiUrl,{ method: 'GET', mode: 'cors' })
+    // .then((resp) => {
+    //     debugger
+    //     return resp.json
+    // })
+    // // const loadData = fetch(apiUrl, { method: 'GET', mode: 'cors' })  
+    // .then(data => {
+    //     const chartResultsData = data['result']['43200'];
+    //     return chartResultsData.map((detail, idx) => ({
+    //         date: new Date (detail[0] * 1000),
+    //         open: detail[1],
+    //         high: detail[2],
+    //         low: detail[3],
+    //         close: detail[4],
+    //         volume: detail[5]
+    //     }));
+    // });
 
     loadData.then((data) => {
         debugger
@@ -48,35 +69,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // body();
     // chart();
     
-    // fetch(apiUrl, { method: 'GET', mode: 'cors' })
+    // const loadData = fetch(apiUrl, { method: 'GET', mode: 'cors' })
     // .then((resp) => {
     //     debugger
     //     return resp.json()})
     //     .then((data) => {
-    //         // parseData(data);
-    //         debugger
-    //         drawChart(parseData(data.bpi));
+    //      const chartResultsData = data['result']['43200']; //every day
+        
+    //     return chartResultsData.map((detail, idx) => ({
+    //         date: new Date (detail[0] * 1000),
+    //         open: detail[1],
+    //         high: detail[2],
+    //         low: detail[3],
+    //         close: detail[4],
+    //         volume: detail[5]
     //     })
     //     .catch((err) => {console.log(err)})
-
-    // d3.csv('sample-data.csv')
-    // .then((data) => {
-    //     let chartResultData = [];
-    //     console.log("we in loadData")
-    //         debugger
-    //         for (let i=0; i < data.length; i++) {
-    //             chartResultData.push({
-    //                 date: data[i].Date,
-    //                 high: Number(data[i].High),
-    //                 low: Number(data[i].Low),
-    //                 open: Number(data[i].Open),
-    //                 close: Number(data[i].Close),
-    //                 volume: Number(data[i].Volume)
-    //             })}
-    //         initializeChart(chartResultData);
-    // });
-    // let url = ("sample-data.json")
-    // loadData(url);
 
     // function loadData(url) {
     //     let data = [];
@@ -142,9 +150,9 @@ document.addEventListener("DOMContentLoaded", () => {
         //     }
         // });
 
-        const margin = { top: 50, right: 50, bottom: 50, left: 50 };
-        const width = window.innerWidth - margin.left - margin.right;
-        const height = 600 - margin.top - margin.bottom; 
+        const margin = { top: 30, right: 45, bottom: 40, left: 25 };
+        const width = document.querySelector('#chart').offsetWidth - margin.left - margin.right;
+        const height = 400 - margin.top - margin.bottom; 
         // add SVG to the page
         
         const svg = d3
@@ -196,7 +204,8 @@ document.addEventListener("DOMContentLoaded", () => {
             .data([data])
             .style('fill', 'none')
             .attr('id', 'priceChart')
-            .attr('stroke', 'yellowgreen')
+            .attr('stroke', '#8ecc54')
+            // .attr('stroke', '#5cc7b2')
             .attr('stroke-width', '1.5')
             .attr('d', line);
 
@@ -232,7 +241,9 @@ document.addEventListener("DOMContentLoaded", () => {
             .data([movingAverageData])
             .style('fill', 'none')
             .attr('id', 'movingAverageLine')
-            .attr('stroke', '#FF8900')
+            // .attr('stroke', '#FF8900') // orange
+            // .attr('stroke', '#f9ac70') // coral
+            .attr('stroke', '#f59c3e') // 
             .attr('d', movingAverageLine);
 
     // // /* Volume series bars */
@@ -299,7 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // crosshairs
     function generateCrosshair(e) {
         //returns corresponding value from the domain
-        // debugger
+        debugger
         const correspondingDate = xScale.invert(d3.pointer(e)[0]);
         //gets insertion point
         const i = bisectDate(data, correspondingDate, 1);
@@ -331,7 +342,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Legends
     const updateLegends = (currentData) => {
         d3.selectAll('.lineLegend').remove();
-
+        debugger
         const legendKeys = Object.keys(data[0]);
         const lineLegend = svg
             .selectAll('.lineLegend')
@@ -346,6 +357,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lineLegend
             .append('text')
             .text(d => {
+                debugger
                 if (d === 'date') {
                     return `${d}: ${currentData[d].toLocaleDateString()}`;
                 } else if (
