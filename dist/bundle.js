@@ -12,354 +12,18 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _src_body__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/body */ "./src/body.js");
-/* harmony import */ var _src_currency_chart__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/currency/chart */ "./src/currency/chart.js");
+/* harmony import */ var _src_currency_chart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/currency/chart */ "./src/currency/chart.js");
+/* harmony import */ var _src_modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/modal */ "./src/modal.js");
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2__);
-var _this = undefined;
 
-
-
-
-var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
 
 
 document.addEventListener("DOMContentLoaded", function () {
   console.log("We connected");
-  var closeModal = document.getElementById('modal');
-  document.querySelector('#close-modal').addEventListener('click', function () {
-    closeModal.classList.add('animate-modal');
-    setTimeout(function () {
-      closeModal.classList.add("hidden");
-    }, 1000);
-  });
-  closeModal.addEventListener('animationend', function () {
-    if (_this.classList.contains('animate-modal')) {
-      _this.style.display = 'none';
-
-      _this.classList.remove('animate-modal'); // closeModal.classList.add("hidden"); 
-
-    }
-  });
-  var apiUrl = "https://cors-anywhere.herokuapp.com/https://finnhub.io/api/v1/crypto/candle?symbol=BINANCE:BTCUSDT&resolution=D&from=1572651390&to=1575243390&token=buurd5f48v6rvcd7bba0";
-  var loadData = fetch(apiUrl, {
-    method: 'GET',
-    mode: 'cors'
-  }).then(function (res) {
-    debugger;
-    return res.json();
-  }).then(function (data) {
-    debugger;
-    var chartResultsData = [];
-
-    for (var i = 0; i < data['c'].length; i++) {
-      chartResultsData.push({
-        date: new Date(data.t[i] * 1000),
-        open: data.o[i],
-        high: data.h[i],
-        low: data.l[i],
-        close: data.c[i],
-        volume: data.v[i]
-      });
-    }
-
-    initializeChart(chartResultsData);
-  });
-  loadData; // const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.cryptowat.ch/markets/coinbase-pro/btcusd/ohlc`
-  // // const loadData = d3.json('sample-crypto.json')
-  // const loadData = fetch(apiUrl, { 
-  //         method: 'GET', 
-  //         // header: {"Access-Control-Allow-Origin": "*"},
-  //         mode: 'cors' 
-  //     })  
-  //     .then(data => {
-  //         debugger
-  //         const chartResultsData = data['result']['43200'];
-  //         return chartResultsData.map((detail, idx) => ({
-  //             date: new Date (detail[0] * 1000),
-  //             open: detail[1],``
-  //             high: detail[2],
-  //             low: detail[3],
-  //             close: detail[4],
-  //             volume: detail[5]
-  //         })
-  //     );
-  // });
-  // const loadData = fetch(apiUrl,{ method: 'GET', mode: 'cors' })
-  // .then((resp) => {
-  //     debugger
-  //     return resp.json
-  // })
-  // // const loadData = fetch(apiUrl, { method: 'GET', mode: 'cors' })  
-  // .then(data => {
-  //     const chartResultsData = data['result']['43200'];
-  //     return chartResultsData.map((detail, idx) => ({
-  //         date: new Date (detail[0] * 1000),
-  //         open: detail[1],
-  //         high: detail[2],
-  //         low: detail[3],
-  //         close: detail[4],
-  //         volume: detail[5]
-  //     }));
-  // });
-  // loadData.then((data) => {
-  //     debugger
-  //     initializeChart(data);
-  // });
-  // body();
-  // chart();
-  // const loadData = fetch(apiUrl, { method: 'GET', mode: 'cors' })
-  // .then((resp) => {
-  //     debugger
-  //     return resp.json()})
-  //     .then((data) => {
-  //      const chartResultsData = data['result']['43200']; //every day
-  //     return chartResultsData.map((detail, idx) => ({
-  //         date: new Date (detail[0] * 1000),
-  //         open: detail[1],
-  //         high: detail[2],
-  //         low: detail[3],
-  //         close: detail[4],
-  //         volume: detail[5]
-  //     })
-  //     .catch((err) => {console.log(err)})
-  // function loadData(url) {
-  //     let data = [];
-  //     // debugger
-  //     let xhr = new XMLHttpRequest();
-  //     xhr.onreadystatechange = function (e) {
-  //         debugger
-  //         if (xhr.readyState === 4 && xhr.status === 200) {
-  //             debugger
-  //             let resp = JSON.stringify(xhr.responseText);
-  //             let output = JSON.parse(resp);
-  //             for (let i = 0; i < output.length; i++) {
-  //                 data.push(output[i]);
-  //             }
-  //         }
-  //     };
-  //     xhr.open('GET', url, true);
-  //     xhr.send()
-  //     initializeChart(data)
-  //     //  true lets you render the data right away
-  // }
-
-  var responsivefy = function responsivefy(svg) {
-    // get container + svg aspect ratio
-    var container = d3.select(svg.node().parentNode),
-        width = parseInt(svg.style('width')),
-        height = parseInt(svg.style('height')),
-        aspect = width / height; // get width of container and resize svg to fit it
-
-    var resize = function resize() {
-      var targetWidth = parseInt(container.style('width'));
-      svg.attr('width', targetWidth);
-      svg.attr('height', Math.round(targetWidth / aspect));
-    }; // add viewBox and preserveAspectRatio properties,
-    // and call resize so that svg resizes on inital page load
-
-
-    svg.attr('viewBox', '0 0 ' + width + ' ' + height).attr('perserveAspectRatio', 'xMinYMid').call(resize); // to register multiple listeners for same event type,
-    // you need to add namespace, i.e., 'click.foo'
-    // necessary if you call invoke this function for multiple svgs
-    // api docs: https://github.com/mbostock/d3/wiki/Selections#on
-
-    d3.select(window).on('resize.' + container.attr('id'), resize);
-  }; // Kudos to Wen Tjun https://wentjun.com/
-
-
-  function initializeChart(data) {
-    console.log("we in initializeChart"); // if (data)
-    // debugger
-    // data = data.filter(
-    //     row => row['high'] && row['low'] && row['close'] && row['open']
-    // );
-    // thisYearStartDate = new Date(2018, 0, 1);
-    // data = data.filter(row => {
-    //     if (row['date']) {
-    //         return row['date'] >= thisYearStartDate;
-    //     }
-    // });
-
-    var margin = {
-      top: 30,
-      right: 45,
-      bottom: 40,
-      left: 25
-    };
-    var width = document.querySelector('#chart').offsetWidth - margin.left - margin.right;
-    var height = 400 - margin.top - margin.bottom; // add SVG to the page
-
-    var svg = d3.select('#chart').append('svg').attr('width', width + margin['left'] + margin['right']).attr('height', height + margin['top'] + margin['bottom']).call(responsivefy).append('g').attr('transform', "translate(".concat(margin['left'], ",  ").concat(margin['top'], ")")); // find data range
-
-    var xMin = d3.min(data, function (d) {
-      return d['date'];
-    });
-    var xMax = d3.max(data, function (d) {
-      return d['date'];
-    });
-    var yMin = d3.min(data, function (d) {
-      return d['close'];
-    });
-    var yMax = d3.max(data, function (d) {
-      return d['close'];
-    }); // scales for the charts
-
-    var xScale = d3.scaleTime().domain([xMin, xMax]).range([0, width]);
-    var yScale = d3.scaleLinear().domain([yMin - 5, yMax]).range([height, 0]); // create the axes component
-
-    svg.append('g').attr('id', 'xAxis').attr('transform', "translate(0, ".concat(height, ")")).call(d3.axisBottom(xScale));
-    svg.append('g').attr('id', 'yAxis').attr('transform', "translate(".concat(width, ", 0)")).call(d3.axisRight(yScale)); // generates close price line chart when called
-
-    var line = d3.line().x(function (d) {
-      return xScale(d['date']);
-    }).y(function (d) {
-      return yScale(d['close']);
-    }); // Append the path and bind data
-
-    svg.append('path').data([data]).style('fill', 'none').attr('id', 'priceChart').attr('stroke', '#8ecc54') // .attr('stroke', '#5cc7b2')
-    .attr('stroke-width', '1.5').attr('d', line);
-
-    var movingAverage = function movingAverage(data, numPricePoints) {
-      return data.map(function (row, index, total) {
-        var start = Math.max(0, index - numPricePoints);
-        var end = index;
-        var subset = total.slice(start, end + 1);
-        var sum = subset.reduce(function (a, b) {
-          return a + b['close'];
-        }, 0);
-        return {
-          date: row['date'],
-          average: sum / subset.length
-        };
-      });
-    }; // calculates simple moving average over 50 days
-
-
-    var movingAverageData = movingAverage(data, 49); // generates moving average curve when called
-
-    var movingAverageLine = d3.line().x(function (d) {
-      return xScale(d['date']);
-    }).y(function (d) {
-      return yScale(d['average']);
-    }).curve(d3.curveBasis);
-    svg.append('path').data([movingAverageData]).style('fill', 'none').attr('id', 'movingAverageLine') // .attr('stroke', '#FF8900') // orange
-    // .attr('stroke', '#f9ac70') // coral
-    .attr('stroke', '#f59c3e') // 
-    .attr('d', movingAverageLine); // // /* Volume series bars */
-    // const volData = data.filter(d => d['volume'] !== null && d['volume']   !== 0);
-    // const yMinVolume = d3.min(volData, d => {
-    //     return Math.min(d['volume']);
-    // });
-    // const yMaxVolume = d3.max(volData, d => {
-    //     return Math.max(d['volume']);
-    // });
-    // const yVolumeScale = d3
-    //     .scaleLinear()
-    //     .domain([yMinVolume, yMaxVolume])
-    //     .range([height, 0]);
-    // svg
-    //     .selectAll()
-    //     .data(volData)
-    //     .enter()
-    //     .append('rect')
-    //     .attr('x', d => {
-    //         return xScale(d['date']);
-    //     })
-    //     .attr('y', d => {
-    //         return yVolumeScale(d['volume']);
-    //     })
-    //     .attr('fill', (d, i) => {
-    //         if (i === 0) {
-    //             return '#03a678';
-    //         } else {  
-    //             return volData[i - 1].close > d.close ? '#c0392b' : '#03a678'; 
-    //         }
-    //     })
-    //     .attr('width', 1)
-    //     .attr('height', d => {
-    //         return height - yVolumeScale(d['volume']);
-    //     });
-    // renders x and y crosshair
-
-    var focus = svg.append('g').attr('class', 'focus').style('display', 'none');
-    focus.append('circle').attr('r', 4.5);
-    focus.append('line').classed('x', true);
-    focus.append('line').classed('y', true);
-    svg.append('rect').attr('class', 'overlay').attr('width', width).attr('height', height).on('mouseover', function () {
-      return focus.style('display', null);
-    }).on('mouseout', function () {
-      return focus.style('display', 'none');
-    }).on('mousemove', generateCrosshair);
-    d3.select('.overlay').style('fill', 'none');
-    d3.select('.overlay').style('pointer-events', 'all');
-    d3.selectAll('.focus line').style('fill', 'none');
-    d3.selectAll('.focus line').style('stroke', '#67809f');
-    d3.selectAll('.focus line').style('stroke-width', '1.5px');
-    d3.selectAll('.focus line').style('stroke-dasharray', '3 3');
-    var bisectDate = d3.bisector(function (d) {
-      return d.date;
-    }).left; // crosshairs
-
-    function generateCrosshair(e) {
-      //returns corresponding value from the domain
-      // debugger
-      var correspondingDate = xScale.invert(d3.pointer(e)[0]); //gets insertion point
-
-      var i = bisectDate(data, correspondingDate, 1);
-      var d0 = data[i - 1];
-      var d1 = data[i];
-      var currentPoint = correspondingDate - d0['date'] > d1['date'] - correspondingDate ? d1 : d0;
-      focus.attr('transform', "translate(".concat(xScale(currentPoint['date']), ", ").concat(yScale(currentPoint['close']), ")"));
-      focus.select('line.x').attr('x1', 0).attr('x2', width - xScale(currentPoint['date'])).attr('y1', 0).attr('y2', 0);
-      focus.select('line.y').attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', height - yScale(currentPoint['close']));
-      updateLegends(currentPoint);
-    } // Legends
-
-
-    var updateLegends = function updateLegends(currentData) {
-      d3.selectAll('.lineLegend').remove(); // debugger
-
-      var legendKeys = Object.keys(data[0]);
-      var lineLegend = svg.selectAll('.lineLegend').data(legendKeys).enter().append('g').attr('class', 'lineLegend').attr('transform', function (d, i) {
-        return "translate(0, ".concat(i * 20, ")");
-      });
-      lineLegend.append('text').text(function (d) {
-        debugger;
-
-        if (d === 'date') {
-          return "".concat(d, ": ").concat(currentData[d].toLocaleDateString());
-        } else if (d === 'high' || d === 'low' || d === 'open' || d === 'close') {
-          return "".concat(d, ": ").concat(currentData[d].toFixed(2));
-        } else {
-          return "".concat(d, ": ").concat(currentData[d]);
-        }
-      }).style('fill', 'white').attr('transform', 'translate(15,9)'); //align texts with boxes
-    };
-  }
+  (0,_src_modal__WEBPACK_IMPORTED_MODULE_1__.default)();
+  (0,_src_currency_chart__WEBPACK_IMPORTED_MODULE_0__.default)();
 });
-
-/***/ }),
-
-/***/ "./src/body.js":
-/*!*********************!*\
-  !*** ./src/body.js ***!
-  \*********************/
-/*! namespace exports */
-/*! export default [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => /* binding */ body
-/* harmony export */ });
-function body() {
-  var main = document.querySelector('.main');
-  console.log("we in body");
-}
 
 /***/ }),
 
@@ -391,10 +55,232 @@ function chart(_x) {
 
 function _chart() {
   _chart = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(symbol) {
+    var apiUrl, loadData, responsivefy, initializeChart;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            initializeChart = function _initializeChart(data) {
+              console.log("we in initializeChart"); // if (data)
+              // debugger
+              // data = data.filter(
+              //     row => row['high'] && row['low'] && row['close'] && row['open']
+              // );
+              // thisYearStartDate = new Date(2018, 0, 1);
+              // data = data.filter(row => {
+              //     if (row['date']) {
+              //         return row['date'] >= thisYearStartDate;
+              //     }
+              // });
+
+              var margin = {
+                top: 30,
+                right: 45,
+                bottom: 40,
+                left: 25
+              };
+              var width = document.querySelector('#chart').offsetWidth - margin.left - margin.right;
+              var height = 400 - margin.top - margin.bottom; // add SVG to the page
+
+              var svg = d3.select('#chart').append('svg').attr('width', width + margin['left'] + margin['right']).attr('height', height + margin['top'] + margin['bottom']).call(responsivefy).append('g').attr('transform', "translate(".concat(margin['left'], ",  ").concat(margin['top'], ")")); // find data range
+
+              var xMin = d3.min(data, function (d) {
+                return d['date'];
+              });
+              var xMax = d3.max(data, function (d) {
+                return d['date'];
+              });
+              var yMin = d3.min(data, function (d) {
+                return d['close'];
+              });
+              var yMax = d3.max(data, function (d) {
+                return d['close'];
+              }); // scales for the charts
+
+              var xScale = d3.scaleTime().domain([xMin, xMax]).range([0, width]);
+              var yScale = d3.scaleLinear().domain([yMin - 5, yMax]).range([height, 0]); // create the axes component
+
+              svg.append('g').attr('id', 'xAxis').attr('transform', "translate(0, ".concat(height, ")")).call(d3.axisBottom(xScale));
+              svg.append('g').attr('id', 'yAxis').attr('transform', "translate(".concat(width, ", 0)")).call(d3.axisRight(yScale)); // generates close price line chart when called
+
+              var line = d3.line().x(function (d) {
+                return xScale(d['date']);
+              }).y(function (d) {
+                return yScale(d['close']);
+              }); // Append the path and bind data
+
+              svg.append('path').data([data]).style('fill', 'none').attr('id', 'priceChart').attr('stroke', '#8ecc54') // .attr('stroke', '#5cc7b2')
+              .attr('stroke-width', '1.5').attr('d', line);
+
+              var movingAverage = function movingAverage(data, numPricePoints) {
+                return data.map(function (row, index, total) {
+                  var start = Math.max(0, index - numPricePoints);
+                  var end = index;
+                  var subset = total.slice(start, end + 1);
+                  var sum = subset.reduce(function (a, b) {
+                    return a + b['close'];
+                  }, 0);
+                  return {
+                    date: row['date'],
+                    average: sum / subset.length
+                  };
+                });
+              }; // calculates simple moving average over 50 days
+
+
+              var movingAverageData = movingAverage(data, 49); // generates moving average curve when called
+
+              var movingAverageLine = d3.line().x(function (d) {
+                return xScale(d['date']);
+              }).y(function (d) {
+                return yScale(d['average']);
+              }).curve(d3.curveBasis);
+              svg.append('path').data([movingAverageData]).style('fill', 'none').attr('id', 'movingAverageLine') // .attr('stroke', '#FF8900') // orange
+              // .attr('stroke', '#f9ac70') // coral
+              .attr('stroke', '#f59c3e') // 
+              .attr('d', movingAverageLine); // // /* Volume series bars */
+              // const volData = data.filter(d => d['volume'] !== null && d['volume']   !== 0);
+              // const yMinVolume = d3.min(volData, d => {
+              //     return Math.min(d['volume']);
+              // });
+              // const yMaxVolume = d3.max(volData, d => {
+              //     return Math.max(d['volume']);
+              // });
+              // const yVolumeScale = d3
+              //     .scaleLinear()
+              //     .domain([yMinVolume, yMaxVolume])
+              //     .range([height, 0]);
+              // svg
+              //     .selectAll()
+              //     .data(volData)
+              //     .enter()
+              //     .append('rect')
+              //     .attr('x', d => {
+              //         return xScale(d['date']);
+              //     })
+              //     .attr('y', d => {
+              //         return yVolumeScale(d['volume']);
+              //     })
+              //     .attr('fill', (d, i) => {
+              //         if (i === 0) {
+              //             return '#03a678';
+              //         } else {  
+              //             return volData[i - 1].close > d.close ? '#c0392b' : '#03a678'; 
+              //         }
+              //     })
+              //     .attr('width', 1)
+              //     .attr('height', d => {
+              //         return height - yVolumeScale(d['volume']);
+              //     });
+              // renders x and y crosshair
+
+              var focus = svg.append('g').attr('class', 'focus').style('display', 'none');
+              focus.append('circle').attr('r', 4.5);
+              focus.append('line').classed('x', true);
+              focus.append('line').classed('y', true);
+              svg.append('rect').attr('class', 'overlay').attr('width', width).attr('height', height).on('mouseover', function () {
+                return focus.style('display', null);
+              }).on('mouseout', function () {
+                return focus.style('display', 'none');
+              }).on('mousemove', generateCrosshair);
+              d3.select('.overlay').style('fill', 'none');
+              d3.select('.overlay').style('pointer-events', 'all');
+              d3.selectAll('.focus line').style('fill', 'none');
+              d3.selectAll('.focus line').style('stroke', '#67809f');
+              d3.selectAll('.focus line').style('stroke-width', '1.5px');
+              d3.selectAll('.focus line').style('stroke-dasharray', '3 3');
+              var bisectDate = d3.bisector(function (d) {
+                return d.date;
+              }).left; // crosshairs
+
+              function generateCrosshair(e) {
+                //returns corresponding value from the domain
+                // debugger
+                var correspondingDate = xScale.invert(d3.pointer(e)[0]); //gets insertion point
+
+                var i = bisectDate(data, correspondingDate, 1);
+                var d0 = data[i - 1];
+                var d1 = data[i];
+                var currentPoint = correspondingDate - d0['date'] > d1['date'] - correspondingDate ? d1 : d0;
+                focus.attr('transform', "translate(".concat(xScale(currentPoint['date']), ", ").concat(yScale(currentPoint['close']), ")"));
+                focus.select('line.x').attr('x1', 0).attr('x2', width - xScale(currentPoint['date'])).attr('y1', 0).attr('y2', 0);
+                focus.select('line.y').attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', height - yScale(currentPoint['close']));
+                updateLegends(currentPoint);
+              } // Legends
+
+
+              var updateLegends = function updateLegends(currentData) {
+                d3.selectAll('.lineLegend').remove(); // debugger
+
+                var legendKeys = Object.keys(data[0]);
+                var lineLegend = svg.selectAll('.lineLegend').data(legendKeys).enter().append('g').attr('class', 'lineLegend').attr('transform', function (d, i) {
+                  return "translate(0, ".concat(i * 20, ")");
+                });
+                lineLegend.append('text').text(function (d) {
+                  // debugger
+                  if (d === 'date') {
+                    return "".concat(d, ": ").concat(currentData[d].toLocaleDateString());
+                  } else if (d === 'high' || d === 'low' || d === 'open' || d === 'close') {
+                    return "".concat(d, ": ").concat(currentData[d].toFixed(2));
+                  } else {
+                    return "".concat(d, ": ").concat(currentData[d]);
+                  }
+                }).style('fill', 'white').attr('transform', 'translate(15,9)'); //align texts with boxes
+              };
+            };
+
+            apiUrl = "https://cors-anywhere.herokuapp.com/https://finnhub.io/api/v1/crypto/candle?symbol=BINANCE:BTCUSDT&resolution=D&from=1572651390&to=1575243390&token=buurd5f48v6rvcd7bba0";
+            loadData = fetch(apiUrl, {
+              method: 'GET',
+              mode: 'cors'
+            }).then(function (res) {
+              // debugger
+              return res.json();
+            }).then(function (data) {
+              // debugger
+              var chartResultsData = [];
+
+              for (var i = 0; i < data['c'].length; i++) {
+                chartResultsData.push({
+                  date: new Date(data.t[i] * 1000),
+                  open: data.o[i],
+                  high: data.h[i],
+                  low: data.l[i],
+                  close: data.c[i],
+                  volume: data.v[i]
+                });
+              }
+
+              initializeChart(chartResultsData);
+            });
+
+            responsivefy = function responsivefy(svg) {
+              // get container + svg aspect ratio
+              var container = d3.select(svg.node().parentNode),
+                  width = parseInt(svg.style('width')),
+                  height = parseInt(svg.style('height')),
+                  aspect = width / height; // get width of container and resize svg to fit it
+
+              var resize = function resize() {
+                var targetWidth = parseInt(container.style('width'));
+                svg.attr('width', targetWidth);
+                svg.attr('height', Math.round(targetWidth / aspect));
+              }; // add viewBox and preserveAspectRatio properties,
+              // and call resize so that svg resizes on inital page load
+
+
+              svg.attr('viewBox', '0 0 ' + width + ' ' + height).attr('perserveAspectRatio', 'xMinYMid').call(resize); // to register multiple listeners for same event type,
+              // you need to add namespace, i.e., 'click.foo'
+              // necessary if you call invoke this function for multiple svgs
+              // api docs: https://github.com/mbostock/d3/wiki/Selections#on
+
+              d3.select(window).on('resize.' + container.attr('id'), resize);
+            }; // Kudos to Wen Tjun https://wentjun.com/
+
+
+            loadData;
+
+          case 5:
           case "end":
             return _context.stop();
         }
@@ -402,6 +288,65 @@ function _chart() {
     }, _callee);
   }));
   return _chart.apply(this, arguments);
+}
+
+/***/ }),
+
+/***/ "./src/modal.js":
+/*!**********************!*\
+  !*** ./src/modal.js ***!
+  \**********************/
+/*! namespace exports */
+/*! export default [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => /* binding */ modal
+/* harmony export */ });
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function modal() {
+  return _modal.apply(this, arguments);
+}
+
+function _modal() {
+  _modal = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+    var _this = this;
+
+    var closeModal;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            closeModal = document.getElementById('modal');
+            document.querySelector('#close-modal').addEventListener('click', function () {
+              closeModal.classList.add('animate-modal');
+              setTimeout(function () {
+                closeModal.classList.add("hidden");
+              }, 1000);
+            });
+            closeModal.addEventListener('animationend', function () {
+              if (_this.classList.contains('animate-modal')) {
+                _this.style.display = 'none';
+
+                _this.classList.remove('animate-modal');
+              }
+            });
+
+          case 3:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _modal.apply(this, arguments);
 }
 
 /***/ }),

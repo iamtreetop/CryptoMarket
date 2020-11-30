@@ -1,0 +1,15 @@
+.search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.search-bar > input {
+    outline: none;
+    text-align: center;
+    width: 300px;
+    height: 25px;
+    border-radius: 20px;
+    border: none;
+}
