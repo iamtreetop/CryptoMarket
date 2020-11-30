@@ -22,27 +22,51 @@ document.addEventListener("DOMContentLoaded", () => {
         } 
     });
 
+    const apiUrl = `https://cors-anywhere.herokuapp.com/https://finnhub.io/api/v1/crypto/candle?symbol=BINANCE:BTCUSDT&resolution=D&from=1572651390&to=1575243390&token=buurd5f48v6rvcd7bba0`;
+    const loadData = fetch(apiUrl, { 
+                    method: 'GET',
+                    mode: 'cors' })
+                .then((res) => {
+                    debugger
+                    return res.json()
+                })
+                .then((data) => {
+                    debugger
+                    let chartResultsData = [];
+                    for(let i=0; i < data['c'].length; i++) {
+                        chartResultsData.push({
+                            date: new Date (data.t[i] * 1000),
+                            open: data.o[i],
+                            high: data.h[i],
+                            low: data.l[i],
+                            close: data.c[i],
+                            volume: data.v[i]
+                        })}
+                    initializeChart(chartResultsData)
+                });
 
-    const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.cryptowat.ch/markets/coinbase-pro/btcusd/ohlc`
-    const loadData = d3.json('sample-crypto.json')
+    loadData;
+
+    // const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.cryptowat.ch/markets/coinbase-pro/btcusd/ohlc`
+    // // const loadData = d3.json('sample-crypto.json')
     // const loadData = fetch(apiUrl, { 
     //         method: 'GET', 
     //         // header: {"Access-Control-Allow-Origin": "*"},
     //         mode: 'cors' 
     //     })  
-        .then(data => {
-            debugger
-            const chartResultsData = data['result']['43200'];
-            return chartResultsData.map((detail, idx) => ({
-                date: new Date (detail[0] * 1000),
-                open: detail[1],
-                high: detail[2],
-                low: detail[3],
-                close: detail[4],
-                volume: detail[5]
-            })
-        );
-    });
+    //     .then(data => {
+    //         debugger
+    //         const chartResultsData = data['result']['43200'];
+    //         return chartResultsData.map((detail, idx) => ({
+    //             date: new Date (detail[0] * 1000),
+    //             open: detail[1],``
+    //             high: detail[2],
+    //             low: detail[3],
+    //             close: detail[4],
+    //             volume: detail[5]
+    //         })
+    //     );
+    // });
     // const loadData = fetch(apiUrl,{ method: 'GET', mode: 'cors' })
     // .then((resp) => {
     //     debugger
@@ -61,10 +85,12 @@ document.addEventListener("DOMContentLoaded", () => {
     //     }));
     // });
 
-    loadData.then((data) => {
-        debugger
-        initializeChart(data);
-    });
+    // loadData.then((data) => {
+    //     debugger
+    //     initializeChart(data);
+    // });
+
+    
 
     // body();
     // chart();
@@ -139,6 +165,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function initializeChart (data) {
         console.log("we in initializeChart")
+        // if (data)
+        // debugger
         // data = data.filter(
         //     row => row['high'] && row['low'] && row['close'] && row['open']
         // );
@@ -310,7 +338,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // crosshairs
     function generateCrosshair(e) {
         //returns corresponding value from the domain
-        debugger
+        // debugger
         const correspondingDate = xScale.invert(d3.pointer(e)[0]);
         //gets insertion point
         const i = bisectDate(data, correspondingDate, 1);
@@ -342,7 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Legends
     const updateLegends = (currentData) => {
         d3.selectAll('.lineLegend').remove();
-        debugger
+        // debugger
         const legendKeys = Object.keys(data[0]);
         const lineLegend = svg
             .selectAll('.lineLegend')

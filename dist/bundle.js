@@ -41,26 +41,51 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
   });
-  var apiUrl = "https://cors-anywhere.herokuapp.com/https://api.cryptowat.ch/markets/coinbase-pro/btcusd/ohlc";
-  var loadData = d3.json('sample-crypto.json') // const loadData = fetch(apiUrl, { 
+  var apiUrl = "https://cors-anywhere.herokuapp.com/https://finnhub.io/api/v1/crypto/candle?symbol=BINANCE:BTCUSDT&resolution=D&from=1572651390&to=1575243390&token=buurd5f48v6rvcd7bba0";
+  var loadData = fetch(apiUrl, {
+    method: 'GET',
+    mode: 'cors'
+  }).then(function (res) {
+    debugger;
+    return res.json();
+  }).then(function (data) {
+    debugger;
+    var chartResultsData = [];
+
+    for (var i = 0; i < data['c'].length; i++) {
+      chartResultsData.push({
+        date: new Date(data.t[i] * 1000),
+        open: data.o[i],
+        high: data.h[i],
+        low: data.l[i],
+        close: data.c[i],
+        volume: data.v[i]
+      });
+    }
+
+    initializeChart(chartResultsData);
+  });
+  loadData; // const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.cryptowat.ch/markets/coinbase-pro/btcusd/ohlc`
+  // // const loadData = d3.json('sample-crypto.json')
+  // const loadData = fetch(apiUrl, { 
   //         method: 'GET', 
   //         // header: {"Access-Control-Allow-Origin": "*"},
   //         mode: 'cors' 
   //     })  
-  .then(function (data) {
-    debugger;
-    var chartResultsData = data['result']['43200'];
-    return chartResultsData.map(function (detail, idx) {
-      return {
-        date: new Date(detail[0] * 1000),
-        open: detail[1],
-        high: detail[2],
-        low: detail[3],
-        close: detail[4],
-        volume: detail[5]
-      };
-    });
-  }); // const loadData = fetch(apiUrl,{ method: 'GET', mode: 'cors' })
+  //     .then(data => {
+  //         debugger
+  //         const chartResultsData = data['result']['43200'];
+  //         return chartResultsData.map((detail, idx) => ({
+  //             date: new Date (detail[0] * 1000),
+  //             open: detail[1],``
+  //             high: detail[2],
+  //             low: detail[3],
+  //             close: detail[4],
+  //             volume: detail[5]
+  //         })
+  //     );
+  // });
+  // const loadData = fetch(apiUrl,{ method: 'GET', mode: 'cors' })
   // .then((resp) => {
   //     debugger
   //     return resp.json
@@ -77,11 +102,11 @@ document.addEventListener("DOMContentLoaded", function () {
   //         volume: detail[5]
   //     }));
   // });
-
-  loadData.then(function (data) {
-    debugger;
-    initializeChart(data);
-  }); // body();
+  // loadData.then((data) => {
+  //     debugger
+  //     initializeChart(data);
+  // });
+  // body();
   // chart();
   // const loadData = fetch(apiUrl, { method: 'GET', mode: 'cors' })
   // .then((resp) => {
@@ -144,7 +169,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   function initializeChart(data) {
-    console.log("we in initializeChart"); // data = data.filter(
+    console.log("we in initializeChart"); // if (data)
+    // debugger
+    // data = data.filter(
     //     row => row['high'] && row['low'] && row['close'] && row['open']
     // );
     // thisYearStartDate = new Date(2018, 0, 1);
@@ -276,7 +303,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function generateCrosshair(e) {
       //returns corresponding value from the domain
-      debugger;
+      // debugger
       var correspondingDate = xScale.invert(d3.pointer(e)[0]); //gets insertion point
 
       var i = bisectDate(data, correspondingDate, 1);
@@ -291,8 +318,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     var updateLegends = function updateLegends(currentData) {
-      d3.selectAll('.lineLegend').remove();
-      debugger;
+      d3.selectAll('.lineLegend').remove(); // debugger
+
       var legendKeys = Object.keys(data[0]);
       var lineLegend = svg.selectAll('.lineLegend').data(legendKeys).enter().append('g').attr('class', 'lineLegend').attr('transform', function (d, i) {
         return "translate(0, ".concat(i * 20, ")");
