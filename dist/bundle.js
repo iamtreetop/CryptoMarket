@@ -14,8 +14,10 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _src_currency_chart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/currency/chart */ "./src/currency/chart.js");
 /* harmony import */ var _src_modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/modal */ "./src/modal.js");
-/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
-/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _src_search__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./src/search */ "./src/search.js");
+/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
+/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_3__);
+
 
 
 
@@ -23,6 +25,13 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("We connected");
   (0,_src_modal__WEBPACK_IMPORTED_MODULE_1__.default)();
   (0,_src_currency_chart__WEBPACK_IMPORTED_MODULE_0__.default)();
+  window.cryptosArray = [];
+  document.querySelector('.searchInput').addEventListener('input', function () {
+    // debugger
+    setTimeout(function () {
+      (0,_src_search__WEBPACK_IMPORTED_MODULE_2__.default)();
+    }, 500);
+  });
 });
 
 /***/ }),
@@ -229,7 +238,7 @@ function _chart() {
               };
             };
 
-            apiUrl = "https://cors-anywhere.herokuapp.com/https://finnhub.io/api/v1/crypto/candle?symbol=BINANCE:BTCUSDT&resolution=D&from=1572651390&to=1575243390&token=buurd5f48v6rvcd7bba0";
+            apiUrl = "https://cors-anywhere.herokuapp.com/https://finnhub.io/api/v1/crypto/candle?symbol=BINANCE:ETHUSDT&resolution=D&from=1572651390&to=1575243390&token=buurd5f48v6rvcd7bba0";
             loadData = fetch(apiUrl, {
               method: 'GET',
               mode: 'cors'
@@ -347,6 +356,157 @@ function _modal() {
     }, _callee);
   }));
   return _modal.apply(this, arguments);
+}
+
+/***/ }),
+
+/***/ "./src/search.js":
+/*!***********************!*\
+  !*** ./src/search.js ***!
+  \***********************/
+/*! namespace exports */
+/*! export default [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => /* binding */ search
+/* harmony export */ });
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function search() {
+  var result = document.querySelector('.searchResults');
+  var searchInput = document.querySelector('.searchInput');
+  var clear = document.getElementById('clear'); // const apiUrl = `https://cors-anywhere.herokuapp.com/https://finnhub.io/api/v1/stock/symbol?exchange=US&token=buurd5f48v6rvcd7bba0`;
+
+  var searchTerm = searchInput.value;
+
+  var fetchCryptos = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              if (!(window.cryptosArray.length === 0)) {
+                _context.next = 4;
+                break;
+              }
+
+              _context.next = 3;
+              return fetch('https://finnhub.io/api/v1/crypto/symbol?exchange=binance&token=buurd5f48v6rvcd7bba0', {
+                method: 'GET',
+                mode: 'cors'
+              }).then(function (res) {
+                debugger;
+                return res.json();
+              }).then(function (data) {
+                debugger;
+                var chartResultsData = [];
+
+                for (var i = 0; i < data.length; i++) {
+                  chartResultsData.push({
+                    symbol: data[i].displaySymbol,
+                    description: data[i].description
+                  });
+                }
+
+                return chartResultsData;
+              });
+
+            case 3:
+              window.cryptosArray = _context.sent;
+
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function fetchCryptos() {
+      return _ref.apply(this, arguments);
+    };
+  }();
+
+  var showCryptos = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+      var cryptos, newCryptos, text;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return fetchCryptos();
+
+            case 2:
+              debugger;
+              cryptos = window.cryptosArray;
+              newCryptos = [];
+              cryptos.filter(function (crypto) {
+                if (crypto.symbol.includes(searchTerm.toUpperCase())) {
+                  newCryptos.push(crypto);
+                }
+              });
+              result.innerHTML = '';
+
+              if (newCryptos.length > 0) {
+                newCryptos.forEach(function (crypto) {
+                  debugger;
+                  var li = document.createElement('li');
+                  li.classList.add('crypto-item');
+                  var symbol = document.createElement('p');
+                  symbol.innerText = crypto.symbol;
+                  var name = document.createElement('p');
+                  name.innerText = crypto.description;
+                  li.appendChild(symbol);
+                  li.appendChild(name);
+                  li.addEventListener('click', function () {
+                    return select(crypto.symbol);
+                  });
+                  result.appendChild(li);
+                });
+              } else {
+                text = document.createElement('p');
+                text.innerText = "No result";
+                result.appendChild(text);
+              }
+
+              result.style.borderBottom = "10px solid rgba(255, 255, 255, 0)";
+              result.style.borderTop = "10px solid rgba(255, 255, 255, 0)";
+
+            case 10:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }));
+
+    return function showCryptos() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  function select(symbol) {
+    show(symbol);
+    reset();
+  }
+
+  var reset = function reset() {
+    // debugger
+    result.innerHTML = "";
+    result.style.border = "none";
+    searchInput.value = "";
+  };
+
+  clear.addEventListener('click', reset);
+  searchTerm !== "" ? showCryptos() : reset();
 }
 
 /***/ }),

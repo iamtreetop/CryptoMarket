@@ -2,7 +2,7 @@
 const d3 = require('d3');
 
 export default async function chart(symbol) {
-    const apiUrl = `https://cors-anywhere.herokuapp.com/https://finnhub.io/api/v1/crypto/candle?symbol=BINANCE:BTCUSDT&resolution=D&from=1572651390&to=1575243390&token=buurd5f48v6rvcd7bba0`;
+    const apiUrl = `https://cors-anywhere.herokuapp.com/https://finnhub.io/api/v1/crypto/candle?symbol=BINANCE:ETHUSDT&resolution=D&from=1572651390&to=1575243390&token=buurd5f48v6rvcd7bba0`;
     const loadData = fetch(apiUrl, { 
                     method: 'GET',
                     mode: 'cors' })
