@@ -494,7 +494,7 @@ function search() {
   }();
 
   function select(symbol) {
-    show(symbol);
+    // show(symbol);
     reset();
   }
 
