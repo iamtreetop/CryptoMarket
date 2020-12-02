@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("We connected");
   (0,_src_modal__WEBPACK_IMPORTED_MODULE_1__.default)();
   (0,_src_currency_chart__WEBPACK_IMPORTED_MODULE_0__.default)();
-  window.cryptosArray = [];
+  window.coinsArray = [];
   document.querySelector('.searchInput').addEventListener('input', function () {
     // debugger
     setTimeout(function () {
@@ -71,8 +71,8 @@ function _chart() {
           case 0:
             initializeChart = function _initializeChart(data) {
               console.log("we in initializeChart"); // if (data)
-              // debugger
-              // data = data.filter(
+
+              debugger; // data = data.filter(
               //     row => row['high'] && row['low'] && row['close'] && row['open']
               // );
               // thisYearStartDate = new Date(2018, 0, 1);
@@ -238,25 +238,24 @@ function _chart() {
               };
             };
 
-            apiUrl = "https://cors-anywhere.herokuapp.com/https://finnhub.io/api/v1/crypto/candle?symbol=BINANCE:ETHUSDT&resolution=D&from=1572651390&to=1575243390&token=buurd5f48v6rvcd7bba0";
+            apiUrl = "https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/ethereum/ohlc?vs_currency=usd&days=30";
             loadData = fetch(apiUrl, {
               method: 'GET',
               mode: 'cors'
             }).then(function (res) {
-              // debugger
+              debugger;
               return res.json();
             }).then(function (data) {
-              // debugger
+              debugger;
               var chartResultsData = [];
 
-              for (var i = 0; i < data['c'].length; i++) {
+              for (var i = 0; i < data.length; i++) {
                 chartResultsData.push({
-                  date: new Date(data.t[i] * 1000),
-                  open: data.o[i],
-                  high: data.h[i],
-                  low: data.l[i],
-                  close: data.c[i],
-                  volume: data.v[i]
+                  date: new Date(data[i][0]),
+                  open: data[i][1],
+                  high: data[i][2],
+                  low: data[i][3],
+                  close: data[i][4]
                 });
               }
 
@@ -386,40 +385,40 @@ function search() {
 
   var searchTerm = searchInput.value;
 
-  var fetchCryptos = /*#__PURE__*/function () {
+  var fetchCoins = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (!(window.cryptosArray.length === 0)) {
+              if (!(window.coinsArray.length === 0)) {
                 _context.next = 4;
                 break;
               }
 
               _context.next = 3;
-              return fetch('https://finnhub.io/api/v1/crypto/symbol?exchange=binance&token=buurd5f48v6rvcd7bba0', {
+              return fetch('https://api.coingecko.com/api/v3/coins/list', {
                 method: 'GET',
                 mode: 'cors'
               }).then(function (res) {
-                debugger;
+                // debugger
                 return res.json();
               }).then(function (data) {
                 debugger;
-                var chartResultsData = [];
+                var searchResultsData = [];
 
                 for (var i = 0; i < data.length; i++) {
-                  chartResultsData.push({
-                    symbol: data[i].displaySymbol,
-                    description: data[i].description
+                  searchResultsData.push({
+                    symbol: data[i].symbol,
+                    name: data[i].name
                   });
                 }
 
-                return chartResultsData;
+                return searchResultsData;
               });
 
             case 3:
-              window.cryptosArray = _context.sent;
+              window.coinsArray = _context.sent;
 
             case 4:
             case "end":
@@ -429,45 +428,45 @@ function search() {
       }, _callee);
     }));
 
-    return function fetchCryptos() {
+    return function fetchCoins() {
       return _ref.apply(this, arguments);
     };
   }();
 
-  var showCryptos = /*#__PURE__*/function () {
+  var showCoins = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-      var cryptos, newCryptos, text;
+      var coins, newCoins, text;
       return regeneratorRuntime.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return fetchCryptos();
+              return fetchCoins();
 
             case 2:
-              debugger;
-              cryptos = window.cryptosArray;
-              newCryptos = [];
-              cryptos.filter(function (crypto) {
-                if (crypto.symbol.includes(searchTerm.toUpperCase())) {
-                  newCryptos.push(crypto);
+              // debugger
+              coins = window.coinsArray;
+              newCoins = [];
+              coins.filter(function (coin) {
+                if (coin.symbol.includes(searchTerm.toLowerCase()) || coin.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+                  newCoins.push(coin);
                 }
               });
               result.innerHTML = '';
 
-              if (newCryptos.length > 0) {
-                newCryptos.forEach(function (crypto) {
-                  debugger;
+              if (newCoins.length > 0) {
+                newCoins.forEach(function (coin) {
+                  // debugger
                   var li = document.createElement('li');
-                  li.classList.add('crypto-item');
+                  li.classList.add('coin-item');
                   var symbol = document.createElement('p');
-                  symbol.innerText = crypto.symbol;
+                  symbol.innerText = coin.symbol;
                   var name = document.createElement('p');
-                  name.innerText = crypto.description;
+                  name.innerText = coin.name;
                   li.appendChild(symbol);
                   li.appendChild(name);
                   li.addEventListener('click', function () {
-                    return select(crypto.symbol);
+                    return select(coin.symbol);
                   });
                   result.appendChild(li);
                 });
@@ -480,7 +479,7 @@ function search() {
               result.style.borderBottom = "10px solid rgba(255, 255, 255, 0)";
               result.style.borderTop = "10px solid rgba(255, 255, 255, 0)";
 
-            case 10:
+            case 9:
             case "end":
               return _context2.stop();
           }
@@ -488,7 +487,7 @@ function search() {
       }, _callee2);
     }));
 
-    return function showCryptos() {
+    return function showCoins() {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -506,7 +505,7 @@ function search() {
   };
 
   clear.addEventListener('click', reset);
-  searchTerm !== "" ? showCryptos() : reset();
+  searchTerm !== "" ? showCoins() : reset();
 }
 
 /***/ }),

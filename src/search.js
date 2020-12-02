@@ -5,60 +5,61 @@ export default function search(){
     // const apiUrl = `https://cors-anywhere.herokuapp.com/https://finnhub.io/api/v1/stock/symbol?exchange=US&token=buurd5f48v6rvcd7bba0`;
 
     let searchTerm = searchInput.value;
-    const fetchCryptos = async () => {
+    const fetchCoins = async () => {
         // debugger
-        if(window.cryptosArray.length === 0){
+        if(window.coinsArray.length === 0){
             // debugger
-            window.cryptosArray = await fetch(
-                    'https://finnhub.io/api/v1/crypto/symbol?exchange=binance&token=buurd5f48v6rvcd7bba0', { 
+            window.coinsArray = await fetch(
+                    'https://api.coingecko.com/api/v3/coins/list', { 
                     method: 'GET',
                     mode: 'cors' })
                 .then((res) => {
-                    debugger
+                    // debugger
                     return res.json()
                 })
                 .then((data) => {
                     debugger
-                    let chartResultsData = [];
+                    let searchResultsData = [];
                     for(let i=0; i < data.length; i++) {
-                        chartResultsData.push({
-                            symbol: data[i].displaySymbol,
-                            description: data[i].description,
+                        searchResultsData.push({
+                            symbol: data[i].symbol,
+                            name: data[i].name,
                         })}
-                    return chartResultsData;
+                    return searchResultsData;
                 });
         }
     }
 
-    const showCryptos = async () => {
-        await fetchCryptos();
-        debugger
-        let cryptos = window.cryptosArray;
-        let newCryptos = []
+    const showCoins = async () => {
+        await fetchCoins();
+        // debugger
+        let coins = window.coinsArray;
+        let newCoins = []
 
-        cryptos.filter((crypto) => {
-            if (crypto.symbol.includes(searchTerm.toUpperCase())){
-                newCryptos.push(crypto)
+        coins.filter((coin) => {
+            if (coin.symbol.includes(searchTerm.toLowerCase()) ||
+                coin.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+                newCoins.push(coin)
             }
         });
         result.innerHTML = '';
-        if(newCryptos.length > 0){
-            newCryptos.forEach((crypto) => 
+        if(newCoins.length > 0){
+            newCoins.forEach((coin) => 
             {
-                debugger
+                // debugger
                 const li = document.createElement('li');
-                li.classList.add('crypto-item');
+                li.classList.add('coin-item');
     
                 const symbol = document.createElement('p');
-                symbol.innerText = crypto.symbol;
+                symbol.innerText = coin.symbol;
     
                 const name = document.createElement('p');
-                name.innerText = crypto.description;
+                name.innerText = coin.name;
     
                 li.appendChild(symbol);
                 li.appendChild(name);
     
-                li.addEventListener('click', () => select(crypto.symbol))
+                li.addEventListener('click', () => select(coin.symbol))
     
                 result.appendChild(li);
             })
@@ -85,6 +86,6 @@ export default function search(){
     }
 
     clear.addEventListener('click', reset)
-    searchTerm !== "" ? showCryptos() : reset();
+    searchTerm !== "" ? showCoins() : reset();
 
 }

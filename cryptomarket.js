@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     modal();
     chart();
 
-    window.cryptosArray = [];
+    window.coinsArray = [];
 
     document.querySelector('.searchInput').addEventListener('input', () => {
         // debugger

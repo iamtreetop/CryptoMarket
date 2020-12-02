@@ -2,25 +2,25 @@
 const d3 = require('d3');
 
 export default async function chart(symbol) {
-    const apiUrl = `https://cors-anywhere.herokuapp.com/https://finnhub.io/api/v1/crypto/candle?symbol=BINANCE:ETHUSDT&resolution=D&from=1572651390&to=1575243390&token=buurd5f48v6rvcd7bba0`;
+    const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/ethereum/ohlc?vs_currency=usd&days=30`;
     const loadData = fetch(apiUrl, { 
                     method: 'GET',
                     mode: 'cors' })
                 .then((res) => {
-                    // debugger
+                    debugger
                     return res.json()
                 })
                 .then((data) => {
-                    // debugger
+                    debugger
                     let chartResultsData = [];
-                    for(let i=0; i < data['c'].length; i++) {
+                    for(let i=0; i < data.length; i++) {
                         chartResultsData.push({
-                            date: new Date (data.t[i] * 1000),
-                            open: data.o[i],
-                            high: data.h[i],
-                            low: data.l[i],
-                            close: data.c[i],
-                            volume: data.v[i]
+                            date: new Date (data[i][0]),
+                            open: data[i][1],
+                            high: data[i][2],
+                            low: data[i][3],
+                            close: data[i][4]
+                        
                         })}
                     initializeChart(chartResultsData)
                 });
@@ -58,7 +58,7 @@ export default async function chart(symbol) {
     function initializeChart (data) {
         console.log("we in initializeChart")
         // if (data)
-        // debugger
+        debugger
         // data = data.filter(
         //     row => row['high'] && row['low'] && row['close'] && row['open']
         // );
