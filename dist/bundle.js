@@ -543,7 +543,7 @@ function search() {
               }).then(function (res) {
                 return res.json();
               }).then(function (data) {
-                var searchResultsData = []; // debugger
+                var searchResultsData = [];
 
                 for (var i = 0; i < data.length; i++) {
                   searchResultsData.push({
@@ -583,7 +583,6 @@ function search() {
               return fetchCoins();
 
             case 2:
-              // debugger
               coins = window.coinsArray;
               newCoins = [];
               coins.filter(function (coin) {
@@ -633,7 +632,6 @@ function search() {
   }
 
   var reset = function reset() {
-    // debugger
     result.innerHTML = "";
     result.style.border = "none";
     searchInput.value = "";

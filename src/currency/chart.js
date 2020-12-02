@@ -14,7 +14,6 @@ export default async function chart(symbol) {
     }).then((res) => {
         return res.json()
     }).then((data) => {
-        // debugger
         let chartResultsData = [];
         for(let i=0; i < data.length; i++) {
             chartResultsData.push({
@@ -60,18 +59,6 @@ export default async function chart(symbol) {
 
     function initializeChart (data) {
         console.log("we in initializeChart")
-        // if (data)
-        // debugger
-        // data = data.filter(
-        //     row => row['high'] && row['low'] && row['close'] && row['open']
-        // );
-        // thisYearStartDate = new Date(2018, 0, 1);
-
-        // data = data.filter(row => {
-        //     if (row['date']) {
-        //         return row['date'] >= thisYearStartDate;
-        //     }
-        // });
 
         const margin = { top: 30, right: 45, bottom: 40, left: 25 };
         const width = document.querySelector('#chart').offsetWidth - margin.left - margin.right;
@@ -233,7 +220,6 @@ export default async function chart(symbol) {
     // crosshairs
     function generateCrosshair(e) {
         //returns corresponding value from the domain
-        // debugger
         const correspondingDate = xScale.invert(d3.pointer(e)[0]);
         //gets insertion point
         const i = bisectDate(data, correspondingDate, 1);
@@ -265,7 +251,6 @@ export default async function chart(symbol) {
     // Legends
     const updateLegends = (currentData) => {
         d3.selectAll('.lineLegend').remove();
-        // debugger
         const legendKeys = Object.keys(data[0]);
         const lineLegend = svg
             .selectAll('.lineLegend')
@@ -280,7 +265,6 @@ export default async function chart(symbol) {
         lineLegend
             .append('text')
             .text(d => {
-                // debugger
                 if (d === 'date') {
                     return `${d.toUpperCase()}: ${currentData[d].toLocaleDateString()}`;
                 } else if (

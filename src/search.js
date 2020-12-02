@@ -17,7 +17,6 @@ export default function search(){
                 return res.json()
             }).then((data) => {
                 let searchResultsData = [];
-                // debugger
                 for(let i=0; i < data.length; i++) {
                     searchResultsData.push({
                         coinId: data[i].id,
@@ -32,7 +31,6 @@ export default function search(){
 
     const showCoins = async () => {
         await fetchCoins();
-        // debugger
         let coins = window.coinsArray;
         let newCoins = []
 
@@ -77,7 +75,6 @@ export default function search(){
     }
 
     const reset = () => {
-        // debugger
         result.innerHTML = "";
         result.style.border = "none";
         searchInput.value = "";

@@ -13,15 +13,12 @@ export default async function showCoinDetails(symbol) {
         method: 'GET',
         mode: 'cors'
     }).then((res) => {
-        debugger
         return res.json()
     }).then((data) => {
-        debugger
         return data
     })
 
     if (coinInfo["symbol"] !== undefined){
-        debugger
         const header = document.createElement('div');
         const firstLine = document.createElement('div');
         const name = document.createElement('h1');
