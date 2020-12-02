@@ -71,8 +71,8 @@ function _chart() {
           case 0:
             initializeChart = function _initializeChart(data) {
               console.log("we in initializeChart"); // if (data)
-
-              debugger; // data = data.filter(
+              // debugger
+              // data = data.filter(
               //     row => row['high'] && row['low'] && row['close'] && row['open']
               // );
               // thisYearStartDate = new Date(2018, 0, 1);
@@ -238,14 +238,16 @@ function _chart() {
               };
             };
 
-            apiUrl = "https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/ethereum/ohlc?vs_currency=usd&days=30";
+            console.log("We in CHART");
+            console.log(symbol);
+            apiUrl = "https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/".concat(symbol, "/ohlc?vs_currency=usd&days=30");
             loadData = fetch(apiUrl, {
               method: 'GET',
               mode: 'cors'
             }).then(function (res) {
               return res.json();
             }).then(function (data) {
-              debugger;
+              // debugger
               var chartResultsData = [];
 
               for (var i = 0; i < data.length; i++) {
@@ -287,7 +289,7 @@ function _chart() {
 
             loadData;
 
-          case 5:
+          case 7:
           case "end":
             return _context.stop();
         }
@@ -326,38 +328,40 @@ function showCoinDetails(_x) {
 
 function _showCoinDetails() {
   _showCoinDetails = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(symbol) {
-    var main, apiUrl, coinInfo, header, firstLine, name, ticker, image, left, right, center, industry, marketCap, shortDesc, _header, _firstLine, _name, _ticker, chartEle;
+    var main, apiUrl, coinInfo, header, firstLine, name, ticker, image, secondLine, left, right, center, industry, marketCap, shortDesc, _header, _firstLine, _name, _ticker, chartEle;
 
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            console.log("We in SHOW");
+            console.log(symbol);
             main = document.querySelector('.main');
             apiUrl = "https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/".concat(symbol, "/");
             main.innerHTML = "";
-            _context.next = 5;
+            _context.next = 7;
             return fetch(apiUrl, {
               method: 'GET',
               mode: 'cors'
             }).then(function (res) {
-              debugger;
+              // debugger
               return res.json();
             }).then(function (data) {
-              debugger;
+              // debugger
               return data;
             });
 
-          case 5:
+          case 7:
             coinInfo = _context.sent;
 
             if (coinInfo["symbol"] !== undefined) {
-              debugger;
+              // debugger
               header = document.createElement('div');
               firstLine = document.createElement('div');
               name = document.createElement('h1');
               ticker = document.createElement('h3');
-              image = document.createElement('img'); // const secondLine = document.createElement('div');
-
+              image = document.createElement('img');
+              secondLine = document.createElement('div');
               left = document.createElement('div');
               right = document.createElement('div');
               center = document.createElement('div');
@@ -372,19 +376,19 @@ function _showCoinDetails() {
               firstLine.appendChild(ticker);
               firstLine.classList.add('first-line');
               industry.innerText = "Industry: ".concat(coinInfo.categories[0]);
-              marketCap.innerText = "Market Cap: $".concat(coinInfo.market_data.market_cap.usd);
-              shortDesc.innerText = "Short Description: ".concat(coinInfo.ico_data.short_desc);
-              left.appendChild(industry);
-              center.appendChild(marketCap);
-              right.appendChild(shortDesc);
+              marketCap.innerText = "Market Cap: $".concat(coinInfo.market_data.market_cap.usd); // shortDesc.innerText = `Description: ${coinInfo.description.en}`;
+
+              left.appendChild(industry); // center.appendChild(marketCap);
+
+              right.appendChild(marketCap);
               left.classList.add('left-header');
-              right.classList.add('right-header'); // secondLine.classList.add('second-line');
-              // secondLine.appendChild(left);
-              // secondLine.appendChild(center);
-              // secondLine.appendChild(right);
+              right.classList.add('right-header');
+              secondLine.classList.add('second-line');
+              secondLine.appendChild(left); // secondLine.appendChild(center);
 
-              header.appendChild(firstLine); // header.appendChild(secondLine);
-
+              secondLine.appendChild(right);
+              header.appendChild(firstLine);
+              header.appendChild(secondLine);
               header.classList.add('body-header');
               main.appendChild(header);
             } else {
@@ -411,11 +415,11 @@ function _showCoinDetails() {
             chartEle = document.createElement('div');
             chartEle.id = "chart";
             main.appendChild(chartEle);
-            (0,_chart__WEBPACK_IMPORTED_MODULE_0__.default)(); // const underChart = document.createElement('div');
+            (0,_chart__WEBPACK_IMPORTED_MODULE_0__.default)(symbol); // const underChart = document.createElement('div');
             // underChart.classList.add('under-chart');
             // main.appendChild(underChart);
 
-          case 11:
+          case 13:
           case "end":
             return _context.stop();
         }
@@ -532,10 +536,11 @@ function search() {
               }).then(function (res) {
                 return res.json();
               }).then(function (data) {
-                var searchResultsData = [];
+                var searchResultsData = []; // debugger
 
                 for (var i = 0; i < data.length; i++) {
                   searchResultsData.push({
+                    coinId: data[i].id,
                     symbol: data[i].symbol,
                     name: data[i].name
                   });
@@ -571,6 +576,7 @@ function search() {
               return fetchCoins();
 
             case 2:
+              // debugger
               coins = window.coinsArray;
               newCoins = [];
               coins.filter(function (coin) {
@@ -585,13 +591,13 @@ function search() {
                   var li = document.createElement('li');
                   li.classList.add('coin-item');
                   var symbol = document.createElement('p');
-                  symbol.innerText = coin.symbol;
+                  symbol.innerText = coin.symbol.toUpperCase();
                   var name = document.createElement('p');
                   name.innerText = coin.name;
                   li.appendChild(symbol);
                   li.appendChild(name);
                   li.addEventListener('click', function () {
-                    select(coin.symbol);
+                    select(coin);
                   });
                   result.appendChild(li);
                 });
@@ -615,8 +621,7 @@ function search() {
   }();
 
   function select(symbol) {
-    debugger;
-    (0,_currency_currency__WEBPACK_IMPORTED_MODULE_0__.default)(symbol);
+    (0,_currency_currency__WEBPACK_IMPORTED_MODULE_0__.default)(symbol.coinId);
     reset();
   }
 

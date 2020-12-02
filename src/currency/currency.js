@@ -1,6 +1,8 @@
 import chart from "./chart";
 
 export default async function showCoinDetails(symbol) {
+    console.log("We in SHOW")
+    console.log(symbol)
     const main = document.querySelector('.main');
     const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/${symbol}/`;
     main.innerHTML = "";
@@ -9,21 +11,21 @@ export default async function showCoinDetails(symbol) {
         method: 'GET',
         mode: 'cors'
     }).then((res) => {
-        debugger
+        // debugger
         return res.json()
     }).then((data) => {
-        debugger
+        // debugger
         return data
     })
 
     if (coinInfo["symbol"] !== undefined){
-        debugger
+        // debugger
         const header = document.createElement('div');
         const firstLine = document.createElement('div');
         const name = document.createElement('h1');
         const ticker = document.createElement('h3');
         const image = document.createElement('img');
-        // const secondLine = document.createElement('div');
+        const secondLine = document.createElement('div');
         const left = document.createElement('div');
         const right = document.createElement('div');
         const center = document.createElement('div')
@@ -41,20 +43,20 @@ export default async function showCoinDetails(symbol) {
 
         industry.innerText = `Industry: ${coinInfo.categories[0]}`;
         marketCap.innerText = `Market Cap: $${coinInfo.market_data.market_cap.usd}`;
-        shortDesc.innerText = `Short Description: ${coinInfo.ico_data.short_desc}`;
+        // shortDesc.innerText = `Description: ${coinInfo.description.en}`;
 
         left.appendChild(industry);
-        center.appendChild(marketCap);
-        right.appendChild(shortDesc);
+        // center.appendChild(marketCap);
+        right.appendChild(marketCap);
         left.classList.add('left-header');
         right.classList.add('right-header');
-        // secondLine.classList.add('second-line');
-        // secondLine.appendChild(left);
+        secondLine.classList.add('second-line');
+        secondLine.appendChild(left);
         // secondLine.appendChild(center);
-        // secondLine.appendChild(right);
+        secondLine.appendChild(right);
         
         header.appendChild(firstLine);
-        // header.appendChild(secondLine);
+        header.appendChild(secondLine);
         header.classList.add('body-header');
 
         main.appendChild(header);
@@ -81,7 +83,7 @@ export default async function showCoinDetails(symbol) {
     chartEle.id = "chart";
     main.appendChild(chartEle);
 
-    chart();
+    chart(symbol);
 
     // const underChart = document.createElement('div');
     // underChart.classList.add('under-chart');

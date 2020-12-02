@@ -2,14 +2,16 @@
 const d3 = require('d3');
 
 export default async function chart(symbol) {
-    const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/ethereum/ohlc?vs_currency=usd&days=30`;
+    console.log("We in CHART")
+    console.log(symbol)
+    const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/${symbol}/ohlc?vs_currency=usd&days=30`;
     const loadData = fetch(apiUrl, { 
         method: 'GET',
         mode: 'cors' 
     }).then((res) => {
         return res.json()
     }).then((data) => {
-        debugger
+        // debugger
         let chartResultsData = [];
         for(let i=0; i < data.length; i++) {
             chartResultsData.push({
@@ -56,7 +58,7 @@ export default async function chart(symbol) {
     function initializeChart (data) {
         console.log("we in initializeChart")
         // if (data)
-        debugger
+        // debugger
         // data = data.filter(
         //     row => row['high'] && row['low'] && row['close'] && row['open']
         // );

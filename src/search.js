@@ -17,9 +17,10 @@ export default function search(){
                 return res.json()
             }).then((data) => {
                 let searchResultsData = [];
-
+                // debugger
                 for(let i=0; i < data.length; i++) {
                     searchResultsData.push({
+                        coinId: data[i].id,
                         symbol: data[i].symbol,
                         name: data[i].name,
                     })
@@ -31,7 +32,7 @@ export default function search(){
 
     const showCoins = async () => {
         await fetchCoins();
-
+        // debugger
         let coins = window.coinsArray;
         let newCoins = []
 
@@ -50,7 +51,7 @@ export default function search(){
                 li.classList.add('coin-item');
     
                 const symbol = document.createElement('p');
-                symbol.innerText = coin.symbol;
+                symbol.innerText = coin.symbol.toUpperCase();
     
                 const name = document.createElement('p');
                 name.innerText = coin.name;
@@ -58,7 +59,7 @@ export default function search(){
                 li.appendChild(symbol);
                 li.appendChild(name);
                 li.addEventListener('click', () => {
-                    select(coin.symbol)
+                    select(coin)
                 })
                 result.appendChild(li);
             })
@@ -71,8 +72,7 @@ export default function search(){
     }
 
     function select(symbol) {
-        debugger
-        showCoinDetails(symbol);
+        showCoinDetails(symbol.coinId);
         reset();
     }
 
