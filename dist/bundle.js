@@ -243,7 +243,6 @@ function _chart() {
               method: 'GET',
               mode: 'cors'
             }).then(function (res) {
-              debugger;
               return res.json();
             }).then(function (data) {
               debugger;
@@ -296,6 +295,134 @@ function _chart() {
     }, _callee);
   }));
   return _chart.apply(this, arguments);
+}
+
+/***/ }),
+
+/***/ "./src/currency/currency.js":
+/*!**********************************!*\
+  !*** ./src/currency/currency.js ***!
+  \**********************************/
+/*! namespace exports */
+/*! export default [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => /* binding */ showCoinDetails
+/* harmony export */ });
+/* harmony import */ var _chart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chart */ "./src/currency/chart.js");
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+function showCoinDetails(_x) {
+  return _showCoinDetails.apply(this, arguments);
+}
+
+function _showCoinDetails() {
+  _showCoinDetails = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(symbol) {
+    var main, apiUrl, coinInfo, header, firstLine, name, ticker, image, left, right, center, industry, marketCap, shortDesc, _header, _firstLine, _name, _ticker, chartEle;
+
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            main = document.querySelector('.main');
+            apiUrl = "https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/".concat(symbol, "/");
+            main.innerHTML = "";
+            _context.next = 5;
+            return fetch(apiUrl, {
+              method: 'GET',
+              mode: 'cors'
+            }).then(function (res) {
+              debugger;
+              return res.json();
+            }).then(function (data) {
+              debugger;
+              return data;
+            });
+
+          case 5:
+            coinInfo = _context.sent;
+
+            if (coinInfo["symbol"] !== undefined) {
+              debugger;
+              header = document.createElement('div');
+              firstLine = document.createElement('div');
+              name = document.createElement('h1');
+              ticker = document.createElement('h3');
+              image = document.createElement('img'); // const secondLine = document.createElement('div');
+
+              left = document.createElement('div');
+              right = document.createElement('div');
+              center = document.createElement('div');
+              industry = document.createElement('p');
+              marketCap = document.createElement('p');
+              shortDesc = document.createElement('p');
+              if (coinInfo.image) image.src = "".concat(coinInfo.image.small);
+              name.innerText = "".concat(coinInfo.name);
+              ticker.innerText = "(".concat(coinInfo.symbol.toUpperCase(), ")");
+              firstLine.appendChild(image);
+              firstLine.appendChild(name);
+              firstLine.appendChild(ticker);
+              firstLine.classList.add('first-line');
+              industry.innerText = "Industry: ".concat(coinInfo.categories[0]);
+              marketCap.innerText = "Market Cap: $".concat(coinInfo.market_data.market_cap.usd);
+              shortDesc.innerText = "Short Description: ".concat(coinInfo.ico_data.short_desc);
+              left.appendChild(industry);
+              center.appendChild(marketCap);
+              right.appendChild(shortDesc);
+              left.classList.add('left-header');
+              right.classList.add('right-header'); // secondLine.classList.add('second-line');
+              // secondLine.appendChild(left);
+              // secondLine.appendChild(center);
+              // secondLine.appendChild(right);
+
+              header.appendChild(firstLine); // header.appendChild(secondLine);
+
+              header.classList.add('body-header');
+              main.appendChild(header);
+            } else {
+              _header = document.createElement('div');
+              _firstLine = document.createElement('div');
+              _name = document.createElement('h1');
+              _ticker = document.createElement('h3');
+              _name.innerText = "".concat(window.stocks[symbol].description);
+              _ticker.innerText = "(".concat(symbol.toUpperCase(), ")");
+
+              _firstLine.appendChild(_name);
+
+              _firstLine.appendChild(_ticker);
+
+              _firstLine.classList.add('first-line');
+
+              _header.appendChild(_firstLine);
+
+              _header.classList.add('body-header');
+
+              main.appendChild(_header);
+            }
+
+            chartEle = document.createElement('div');
+            chartEle.id = "chart";
+            main.appendChild(chartEle);
+            (0,_chart__WEBPACK_IMPORTED_MODULE_0__.default)(); // const underChart = document.createElement('div');
+            // underChart.classList.add('under-chart');
+            // main.appendChild(underChart);
+
+          case 11:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _showCoinDetails.apply(this, arguments);
 }
 
 /***/ }),
@@ -366,7 +493,7 @@ function _modal() {
 /*! namespace exports */
 /*! export default [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -374,15 +501,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => /* binding */ search
 /* harmony export */ });
+/* harmony import */ var _currency_currency__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./currency/currency */ "./src/currency/currency.js");
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+
 function search() {
   var result = document.querySelector('.searchResults');
   var searchInput = document.querySelector('.searchInput');
-  var clear = document.getElementById('clear'); // const apiUrl = `https://cors-anywhere.herokuapp.com/https://finnhub.io/api/v1/stock/symbol?exchange=US&token=buurd5f48v6rvcd7bba0`;
-
+  var clear = document.getElementById('clear');
+  var apiUrl = "https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/list";
   var searchTerm = searchInput.value;
 
   var fetchCoins = /*#__PURE__*/function () {
@@ -397,14 +526,12 @@ function search() {
               }
 
               _context.next = 3;
-              return fetch('https://api.coingecko.com/api/v3/coins/list', {
+              return fetch(apiUrl, {
                 method: 'GET',
                 mode: 'cors'
               }).then(function (res) {
-                // debugger
                 return res.json();
               }).then(function (data) {
-                debugger;
                 var searchResultsData = [];
 
                 for (var i = 0; i < data.length; i++) {
@@ -444,7 +571,6 @@ function search() {
               return fetchCoins();
 
             case 2:
-              // debugger
               coins = window.coinsArray;
               newCoins = [];
               coins.filter(function (coin) {
@@ -456,7 +582,6 @@ function search() {
 
               if (newCoins.length > 0) {
                 newCoins.forEach(function (coin) {
-                  // debugger
                   var li = document.createElement('li');
                   li.classList.add('coin-item');
                   var symbol = document.createElement('p');
@@ -466,7 +591,7 @@ function search() {
                   li.appendChild(symbol);
                   li.appendChild(name);
                   li.addEventListener('click', function () {
-                    return select(coin.symbol);
+                    select(coin.symbol);
                   });
                   result.appendChild(li);
                 });
@@ -476,10 +601,7 @@ function search() {
                 result.appendChild(text);
               }
 
-              result.style.borderBottom = "10px solid rgba(255, 255, 255, 0)";
-              result.style.borderTop = "10px solid rgba(255, 255, 255, 0)";
-
-            case 9:
+            case 7:
             case "end":
               return _context2.stop();
           }
@@ -493,7 +615,8 @@ function search() {
   }();
 
   function select(symbol) {
-    // show(symbol);
+    debugger;
+    (0,_currency_currency__WEBPACK_IMPORTED_MODULE_0__.default)(symbol);
     reset();
   }
 

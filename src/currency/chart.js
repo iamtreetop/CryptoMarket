@@ -4,26 +4,24 @@ const d3 = require('d3');
 export default async function chart(symbol) {
     const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/ethereum/ohlc?vs_currency=usd&days=30`;
     const loadData = fetch(apiUrl, { 
-                    method: 'GET',
-                    mode: 'cors' })
-                .then((res) => {
-                    debugger
-                    return res.json()
-                })
-                .then((data) => {
-                    debugger
-                    let chartResultsData = [];
-                    for(let i=0; i < data.length; i++) {
-                        chartResultsData.push({
-                            date: new Date (data[i][0]),
-                            open: data[i][1],
-                            high: data[i][2],
-                            low: data[i][3],
-                            close: data[i][4]
-                        
-                        })}
-                    initializeChart(chartResultsData)
-                });
+        method: 'GET',
+        mode: 'cors' 
+    }).then((res) => {
+        return res.json()
+    }).then((data) => {
+        debugger
+        let chartResultsData = [];
+        for(let i=0; i < data.length; i++) {
+            chartResultsData.push({
+                date: new Date (data[i][0]),
+                open: data[i][1],
+                high: data[i][2],
+                low: data[i][3],
+                close: data[i][4]
+            })
+        }
+        initializeChart(chartResultsData)
+    });
 
     const responsivefy = svg => {
         // get container + svg aspect ratio
