@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
 .search-wrapper{
@@ -24,8 +24,8 @@
 .searchResults {
     background-color: rgba(255, 255, 255, 0.8);
     max-height: 300px;
-    width: 300px;
-    margin-top: 27px;
+    width: 305px;
+    margin-top: 45px;
     color: darkblue;
     overflow: auto;
     box-sizing: border-box;
@@ -42,6 +42,12 @@
 }
 
 .searchResults li:hover{
-    background-color: #d3e0f79c;
+    background-color: #8ecc54c9;
     border-left: 3px solid #003087;
+    border-right: 3px solid #003087;
+    cursor: pointer;
+}
+
+#clear {
+    height: 30px;
 }

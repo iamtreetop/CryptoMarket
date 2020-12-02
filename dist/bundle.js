@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
 /*! namespace exports */
 /*! export default [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__, __webpack_require__.d, __webpack_require__.* */
+/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -51,12 +51,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => /* binding */ chart
 /* harmony export */ });
+/* harmony import */ var _currency__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./currency */ "./src/currency/currency.js");
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 // const rp = require('request-promise');
 var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
+
 
 function chart(_x) {
   return _chart.apply(this, arguments);
@@ -228,18 +230,21 @@ function _chart() {
                 lineLegend.append('text').text(function (d) {
                   // debugger
                   if (d === 'date') {
-                    return "".concat(d, ": ").concat(currentData[d].toLocaleDateString());
+                    return "".concat(d.toUpperCase(), ": ").concat(currentData[d].toLocaleDateString());
                   } else if (d === 'high' || d === 'low' || d === 'open' || d === 'close') {
-                    return "".concat(d, ": ").concat(currentData[d].toFixed(2));
+                    return "".concat(d.toUpperCase(), ": $").concat(currentData[d].toFixed(2));
                   } else {
-                    return "".concat(d, ": ").concat(currentData[d]);
+                    return "".concat(d.toUpperCase(), ": $").concat(currentData[d]);
                   }
                 }).style('fill', 'white').attr('transform', 'translate(15,9)'); //align texts with boxes
               };
             };
 
-            console.log("We in CHART");
-            console.log(symbol);
+            if (symbol === undefined) {
+              symbol = 'bitcoin';
+              (0,_currency__WEBPACK_IMPORTED_MODULE_0__.default)(symbol);
+            }
+
             apiUrl = "https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/".concat(symbol, "/ohlc?vs_currency=usd&days=30");
             loadData = fetch(apiUrl, {
               method: 'GET',
@@ -289,7 +294,7 @@ function _chart() {
 
             loadData;
 
-          case 7:
+          case 6:
           case "end":
             return _context.stop();
         }
@@ -334,28 +339,30 @@ function _showCoinDetails() {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            console.log("We in SHOW");
-            console.log(symbol);
+            if (symbol === undefined) {
+              symbol = "bitcoin";
+            }
+
             main = document.querySelector('.main');
             apiUrl = "https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/".concat(symbol, "/");
             main.innerHTML = "";
-            _context.next = 7;
+            _context.next = 6;
             return fetch(apiUrl, {
               method: 'GET',
               mode: 'cors'
             }).then(function (res) {
-              // debugger
+              debugger;
               return res.json();
             }).then(function (data) {
-              // debugger
+              debugger;
               return data;
             });
 
-          case 7:
+          case 6:
             coinInfo = _context.sent;
 
             if (coinInfo["symbol"] !== undefined) {
-              // debugger
+              debugger;
               header = document.createElement('div');
               firstLine = document.createElement('div');
               name = document.createElement('h1');
@@ -375,7 +382,7 @@ function _showCoinDetails() {
               firstLine.appendChild(name);
               firstLine.appendChild(ticker);
               firstLine.classList.add('first-line');
-              industry.innerText = "Industry: ".concat(coinInfo.categories[0]);
+              industry.innerText = "Category: ".concat(coinInfo.categories[0]);
               marketCap.innerText = "Market Cap: $".concat(coinInfo.market_data.market_cap.usd); // shortDesc.innerText = `Description: ${coinInfo.description.en}`;
 
               left.appendChild(industry); // center.appendChild(marketCap);
@@ -419,7 +426,7 @@ function _showCoinDetails() {
             // underChart.classList.add('under-chart');
             // main.appendChild(underChart);
 
-          case 13:
+          case 12:
           case "end":
             return _context.stop();
         }
@@ -513,7 +520,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 function search() {
   var result = document.querySelector('.searchResults');
-  var searchInput = document.querySelector('.searchInput');
+  var searchInput = document.querySelector('.searchInput').defaultValue = "bitcoin";
   var clear = document.getElementById('clear');
   var apiUrl = "https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/list";
   var searchTerm = searchInput.value;

@@ -1,9 +1,12 @@
 // const rp = require('request-promise');
 const d3 = require('d3');
+import showCoinDetails from "./currency";
 
 export default async function chart(symbol) {
-    console.log("We in CHART")
-    console.log(symbol)
+    if (symbol === undefined) {
+        symbol = 'bitcoin'
+        showCoinDetails(symbol);
+    }
     const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/${symbol}/ohlc?vs_currency=usd&days=30`;
     const loadData = fetch(apiUrl, { 
         method: 'GET',
@@ -279,16 +282,16 @@ export default async function chart(symbol) {
             .text(d => {
                 // debugger
                 if (d === 'date') {
-                    return `${d}: ${currentData[d].toLocaleDateString()}`;
+                    return `${d.toUpperCase()}: ${currentData[d].toLocaleDateString()}`;
                 } else if (
                     d === 'high' ||
                     d === 'low' ||
                     d === 'open' ||
                     d === 'close'
                 ) {
-                    return `${d}: ${currentData[d].toFixed(2)}`;
+                    return `${d.toUpperCase()}: $${currentData[d].toFixed(2)}`;
                 } else {
-                    return `${d}: ${currentData[d]}`;
+                    return `${d.toUpperCase()}: $${currentData[d]}`;
                 }
             })
             .style('fill', 'white')

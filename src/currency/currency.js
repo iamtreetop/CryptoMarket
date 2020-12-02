@@ -1,8 +1,10 @@
 import chart from "./chart";
 
 export default async function showCoinDetails(symbol) {
-    console.log("We in SHOW")
-    console.log(symbol)
+    if (symbol === undefined) {
+        symbol = "bitcoin"
+    }
+
     const main = document.querySelector('.main');
     const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/${symbol}/`;
     main.innerHTML = "";
@@ -11,15 +13,15 @@ export default async function showCoinDetails(symbol) {
         method: 'GET',
         mode: 'cors'
     }).then((res) => {
-        // debugger
+        debugger
         return res.json()
     }).then((data) => {
-        // debugger
+        debugger
         return data
     })
 
     if (coinInfo["symbol"] !== undefined){
-        // debugger
+        debugger
         const header = document.createElement('div');
         const firstLine = document.createElement('div');
         const name = document.createElement('h1');
@@ -41,7 +43,7 @@ export default async function showCoinDetails(symbol) {
         firstLine.appendChild(ticker);
         firstLine.classList.add('first-line');
 
-        industry.innerText = `Industry: ${coinInfo.categories[0]}`;
+        industry.innerText = `Category: ${coinInfo.categories[0]}`;
         marketCap.innerText = `Market Cap: $${coinInfo.market_data.market_cap.usd}`;
         // shortDesc.innerText = `Description: ${coinInfo.description.en}`;
 
