@@ -75,11 +75,12 @@ export default async function showCoinDetails(symbol) {
         twentyFourHrPercent.innerText = `24hr(%): ${(marketData.price_change_percentage_24h_in_currency.usd).toFixed(2)}%`;
 
         left.appendChild(marketCap);
-        left.appendChild(circSupply);
         center.appendChild(currentPrice);
-        center.appendChild(category);
         right.appendChild(twentyFourHrChange);
+        left.appendChild(circSupply);
+        center.appendChild(category);
         right.appendChild(twentyFourHrPercent);
+        
         left.classList.add('left-header');
         right.classList.add('right-header');
         secondLine.classList.add('second-line');

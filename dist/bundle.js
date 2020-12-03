@@ -371,7 +371,6 @@ function _showCoinDetails() {
             coinInfo = _context.sent;
 
             if (coinInfo["symbol"] !== undefined) {
-              debugger;
               header = document.createElement('div');
               firstLine = document.createElement('div');
               name = document.createElement('h1');
@@ -402,10 +401,10 @@ function _showCoinDetails() {
               twentyFourHrChange.innerText = "24hr($): $".concat(formatThousands(marketData.price_change_24h_in_currency.usd));
               twentyFourHrPercent.innerText = "24hr(%): ".concat(marketData.price_change_percentage_24h_in_currency.usd.toFixed(2), "%");
               left.appendChild(marketCap);
-              left.appendChild(circSupply);
               center.appendChild(currentPrice);
-              center.appendChild(category);
               right.appendChild(twentyFourHrChange);
+              left.appendChild(circSupply);
+              center.appendChild(category);
               right.appendChild(twentyFourHrPercent);
               left.classList.add('left-header');
               right.classList.add('right-header');
