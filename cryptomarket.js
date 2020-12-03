@@ -5,7 +5,10 @@ import 'regenerator-runtime/runtime';
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("We connected")
-    
+    // if (symbol === undefined) {
+    //     symbol = "bitcoin"
+    // }
+
     modal();
     chart();
 

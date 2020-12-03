@@ -2,7 +2,7 @@ import showCoinDetails from "./currency/currency";
 
 export default function search(){
     const result = document.querySelector('.searchResults');
-    const searchInput = document.querySelector('.searchInput').defaultValue = "bitcoin";
+    const searchInput = document.querySelector('.searchInput');
     const clear = document.getElementById('clear')
     const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/list`;
 
@@ -33,7 +33,6 @@ export default function search(){
         await fetchCoins();
         let coins = window.coinsArray;
         let newCoins = []
-
         coins.filter((coin) => {
             if (coin.symbol.includes(searchTerm.toLowerCase()) ||
                 coin.name.toLowerCase().includes(searchTerm.toLowerCase())) {

@@ -3,6 +3,29 @@ import chart from "./chart";
 export default async function showCoinDetails(symbol) {
     if (symbol === undefined) {
         symbol = "bitcoin"
+        // chart(symbol)
+    }
+
+    function formatThousands(num){
+        if(num >= 1000){
+            const result = [];
+            const float = num % 1 !== 0;
+            while (num > 1000){
+                if(result.length === 0){
+                    result.unshift(num%1000 >= 100 ? (num%1000).toFixed(2) : `0`+`${(num%1000).toFixed(2)}`);
+                } 
+                else{
+                    result.unshift(num%1000 >= 100 ? (num%1000) : `0`+`${(num%1000)}`);
+                }
+                num = parseInt(num/1000);
+            }
+            result.unshift(num);
+            if(float) result.push(result.pop());
+            return result.join(',');
+        }
+        else{
+            return num.toFixed(2);
+        }
     }
 
     const main = document.querySelector('.main');
@@ -28,9 +51,12 @@ export default async function showCoinDetails(symbol) {
         const left = document.createElement('div');
         const right = document.createElement('div');
         const center = document.createElement('div')
-        const industry = document.createElement('p');
         const marketCap = document.createElement('p');
-        const shortDesc = document.createElement('p');
+        const circSupply = document.createElement('p');
+        const currentPrice = document.createElement('p');
+        const category = document.createElement('p');
+        const twentyFourHrChange = document.createElement('p');
+        const twentyFourHrPercent = document.createElement('p');
     
         if(coinInfo.image) image.src=`${coinInfo.image.small}`;
         name.innerText = `${coinInfo.name}`;
@@ -40,18 +66,25 @@ export default async function showCoinDetails(symbol) {
         firstLine.appendChild(ticker);
         firstLine.classList.add('first-line');
 
-        industry.innerText = `Category: ${coinInfo.categories[0]}`;
-        marketCap.innerText = `Market Cap: $${coinInfo.market_data.market_cap.usd}`;
-        // shortDesc.innerText = `Description: ${coinInfo.description.en}`;
+        let marketData = coinInfo.market_data;
+        marketCap.innerText = `Market Cap: $${formatThousands(marketData.market_cap.usd)}`;
+        circSupply.innerText = `Circulating Volume: ${formatThousands(marketData.circulating_supply)}`;
+        currentPrice.innerText = `Current Price: $${formatThousands(marketData.current_price.usd)}`;
+        category.innerText = `Category: ${coinInfo.categories[0]}`;
+        twentyFourHrChange.innerText = `24hr($): $${formatThousands(marketData.price_change_24h_in_currency.usd)}`;
+        twentyFourHrPercent.innerText = `24hr(%): ${(marketData.price_change_percentage_24h_in_currency.usd).toFixed(2)}%`;
 
-        left.appendChild(industry);
-        // center.appendChild(marketCap);
-        right.appendChild(marketCap);
+        left.appendChild(marketCap);
+        left.appendChild(circSupply);
+        center.appendChild(currentPrice);
+        center.appendChild(category);
+        right.appendChild(twentyFourHrChange);
+        right.appendChild(twentyFourHrPercent);
         left.classList.add('left-header');
         right.classList.add('right-header');
         secondLine.classList.add('second-line');
         secondLine.appendChild(left);
-        // secondLine.appendChild(center);
+        secondLine.appendChild(center);
         secondLine.appendChild(right);
         
         header.appendChild(firstLine);

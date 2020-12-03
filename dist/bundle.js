@@ -22,7 +22,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("We connected");
+  console.log("We connected"); // if (symbol === undefined) {
+  //     symbol = "bitcoin"
+  // }
+
   (0,_src_modal__WEBPACK_IMPORTED_MODULE_1__.default)();
   (0,_src_currency_chart__WEBPACK_IMPORTED_MODULE_0__.default)();
   window.coinsArray = [];
@@ -72,18 +75,7 @@ function _chart() {
         switch (_context.prev = _context.next) {
           case 0:
             initializeChart = function _initializeChart(data) {
-              console.log("we in initializeChart"); // if (data)
-              // debugger
-              // data = data.filter(
-              //     row => row['high'] && row['low'] && row['close'] && row['open']
-              // );
-              // thisYearStartDate = new Date(2018, 0, 1);
-              // data = data.filter(row => {
-              //     if (row['date']) {
-              //         return row['date'] >= thisYearStartDate;
-              //     }
-              // });
-
+              console.log("we in initializeChart");
               var margin = {
                 top: 30,
                 right: 45,
@@ -206,7 +198,6 @@ function _chart() {
 
               function generateCrosshair(e) {
                 //returns corresponding value from the domain
-                // debugger
                 var correspondingDate = xScale.invert(d3.pointer(e)[0]); //gets insertion point
 
                 var i = bisectDate(data, correspondingDate, 1);
@@ -221,14 +212,12 @@ function _chart() {
 
 
               var updateLegends = function updateLegends(currentData) {
-                d3.selectAll('.lineLegend').remove(); // debugger
-
+                d3.selectAll('.lineLegend').remove();
                 var legendKeys = Object.keys(data[0]);
                 var lineLegend = svg.selectAll('.lineLegend').data(legendKeys).enter().append('g').attr('class', 'lineLegend').attr('transform', function (d, i) {
                   return "translate(0, ".concat(i * 20, ")");
                 });
                 lineLegend.append('text').text(function (d) {
-                  // debugger
                   if (d === 'date') {
                     return "".concat(d.toUpperCase(), ": ").concat(currentData[d].toLocaleDateString());
                   } else if (d === 'high' || d === 'low' || d === 'open' || d === 'close') {
@@ -241,8 +230,7 @@ function _chart() {
             };
 
             if (symbol === undefined) {
-              symbol = 'bitcoin';
-              (0,_currency__WEBPACK_IMPORTED_MODULE_0__.default)(symbol);
+              symbol = 'bitcoin'; // loadData;
             }
 
             apiUrl = "https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/".concat(symbol, "/ohlc?vs_currency=usd&days=30");
@@ -252,7 +240,6 @@ function _chart() {
             }).then(function (res) {
               return res.json();
             }).then(function (data) {
-              // debugger
               var chartResultsData = [];
 
               for (var i = 0; i < data.length; i++) {
@@ -333,32 +320,54 @@ function showCoinDetails(_x) {
 
 function _showCoinDetails() {
   _showCoinDetails = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(symbol) {
-    var main, apiUrl, coinInfo, header, firstLine, name, ticker, image, secondLine, left, right, center, industry, marketCap, shortDesc, _header, _firstLine, _name, _ticker, chartEle;
+    var formatThousands, main, apiUrl, coinInfo, header, firstLine, name, ticker, image, secondLine, left, right, center, marketCap, circSupply, currentPrice, category, twentyFourHrChange, twentyFourHrPercent, marketData, _header, _firstLine, _name, _ticker, chartEle;
 
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            formatThousands = function _formatThousands(num) {
+              if (num >= 1000) {
+                var result = [];
+
+                var _float = num % 1 !== 0;
+
+                while (num > 1000) {
+                  if (result.length === 0) {
+                    result.unshift(num % 1000 >= 100 ? (num % 1000).toFixed(2) : "0" + "".concat((num % 1000).toFixed(2)));
+                  } else {
+                    result.unshift(num % 1000 >= 100 ? num % 1000 : "0" + "".concat(num % 1000));
+                  }
+
+                  num = parseInt(num / 1000);
+                }
+
+                result.unshift(num);
+                if (_float) result.push(result.pop());
+                return result.join(',');
+              } else {
+                return num.toFixed(2);
+              }
+            };
+
             if (symbol === undefined) {
-              symbol = "bitcoin";
+              symbol = "bitcoin"; // chart(symbol)
             }
 
             main = document.querySelector('.main');
             apiUrl = "https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/".concat(symbol, "/");
             main.innerHTML = "";
-            _context.next = 6;
+            _context.next = 7;
             return fetch(apiUrl, {
               method: 'GET',
               mode: 'cors'
             }).then(function (res) {
-              debugger;
               return res.json();
             }).then(function (data) {
-              debugger;
               return data;
             });
 
-          case 6:
+          case 7:
             coinInfo = _context.sent;
 
             if (coinInfo["symbol"] !== undefined) {
@@ -372,9 +381,12 @@ function _showCoinDetails() {
               left = document.createElement('div');
               right = document.createElement('div');
               center = document.createElement('div');
-              industry = document.createElement('p');
               marketCap = document.createElement('p');
-              shortDesc = document.createElement('p');
+              circSupply = document.createElement('p');
+              currentPrice = document.createElement('p');
+              category = document.createElement('p');
+              twentyFourHrChange = document.createElement('p');
+              twentyFourHrPercent = document.createElement('p');
               if (coinInfo.image) image.src = "".concat(coinInfo.image.small);
               name.innerText = "".concat(coinInfo.name);
               ticker.innerText = "(".concat(coinInfo.symbol.toUpperCase(), ")");
@@ -382,17 +394,24 @@ function _showCoinDetails() {
               firstLine.appendChild(name);
               firstLine.appendChild(ticker);
               firstLine.classList.add('first-line');
-              industry.innerText = "Category: ".concat(coinInfo.categories[0]);
-              marketCap.innerText = "Market Cap: $".concat(coinInfo.market_data.market_cap.usd); // shortDesc.innerText = `Description: ${coinInfo.description.en}`;
-
-              left.appendChild(industry); // center.appendChild(marketCap);
-
-              right.appendChild(marketCap);
+              marketData = coinInfo.market_data;
+              marketCap.innerText = "Market Cap: $".concat(formatThousands(marketData.market_cap.usd));
+              circSupply.innerText = "Circulating Volume: ".concat(formatThousands(marketData.circulating_supply));
+              currentPrice.innerText = "Current Price: $".concat(formatThousands(marketData.current_price.usd));
+              category.innerText = "Category: ".concat(coinInfo.categories[0]);
+              twentyFourHrChange.innerText = "24hr($): $".concat(formatThousands(marketData.price_change_24h_in_currency.usd));
+              twentyFourHrPercent.innerText = "24hr(%): ".concat(marketData.price_change_percentage_24h_in_currency.usd.toFixed(2), "%");
+              left.appendChild(marketCap);
+              left.appendChild(circSupply);
+              center.appendChild(currentPrice);
+              center.appendChild(category);
+              right.appendChild(twentyFourHrChange);
+              right.appendChild(twentyFourHrPercent);
               left.classList.add('left-header');
               right.classList.add('right-header');
               secondLine.classList.add('second-line');
-              secondLine.appendChild(left); // secondLine.appendChild(center);
-
+              secondLine.appendChild(left);
+              secondLine.appendChild(center);
               secondLine.appendChild(right);
               header.appendChild(firstLine);
               header.appendChild(secondLine);
@@ -426,7 +445,7 @@ function _showCoinDetails() {
             // underChart.classList.add('under-chart');
             // main.appendChild(underChart);
 
-          case 12:
+          case 13:
           case "end":
             return _context.stop();
         }
@@ -520,7 +539,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 function search() {
   var result = document.querySelector('.searchResults');
-  var searchInput = document.querySelector('.searchInput').defaultValue = "bitcoin";
+  var searchInput = document.querySelector('.searchInput');
   var clear = document.getElementById('clear');
   var apiUrl = "https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/list";
   var searchTerm = searchInput.value;
