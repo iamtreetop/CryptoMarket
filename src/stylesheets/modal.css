@@ -49,8 +49,13 @@
 }
 
 .content {
-  height: 212px;
+  height: 280px;
+  margin-top: -10px;
   overflow: auto;
+}
+
+.content a {
+  color: white;
 }
 
 .about-modal {
