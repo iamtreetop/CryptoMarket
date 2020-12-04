@@ -1,6 +1,7 @@
 import chart from "./chart";
 
 export default async function showCoinDetails(symbol) {
+    console.log("We in SHOW")
     if (symbol === undefined) {
         symbol = "bitcoin"
         // chart(symbol)
@@ -117,8 +118,4 @@ export default async function showCoinDetails(symbol) {
     main.appendChild(chartEle);
 
     chart(symbol);
-
-    // const underChart = document.createElement('div');
-    // underChart.classList.add('under-chart');
-    // main.appendChild(underChart);
 }

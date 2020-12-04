@@ -1,4 +1,4 @@
-import showCoinDetails from "./currency/currency";
+import showCoinDetails from "./coin/coin";
 
 export default function search(){
     const result = document.querySelector('.searchResults');

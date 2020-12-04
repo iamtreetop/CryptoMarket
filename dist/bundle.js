@@ -12,11 +12,13 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _src_currency_chart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/currency/chart */ "./src/currency/chart.js");
-/* harmony import */ var _src_modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/modal */ "./src/modal.js");
-/* harmony import */ var _src_search__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./src/search */ "./src/search.js");
-/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
-/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _src_modal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/modal */ "./src/modal.js");
+/* harmony import */ var _src_coin_chart__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/coin/chart */ "./src/coin/chart.js");
+/* harmony import */ var _src_coin_coin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./src/coin/coin */ "./src/coin/coin.js");
+/* harmony import */ var _src_search__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./src/search */ "./src/search.js");
+/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
+/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_4__);
+
 
 
 
@@ -26,23 +28,24 @@ document.addEventListener("DOMContentLoaded", function () {
   //     symbol = "bitcoin"
   // }
 
-  (0,_src_modal__WEBPACK_IMPORTED_MODULE_1__.default)();
-  (0,_src_currency_chart__WEBPACK_IMPORTED_MODULE_0__.default)();
+  (0,_src_modal__WEBPACK_IMPORTED_MODULE_0__.default)();
+  (0,_src_coin_coin__WEBPACK_IMPORTED_MODULE_2__.default)(); // chart();
+
   window.coinsArray = [];
   document.querySelector('.searchInput').addEventListener('input', function () {
     // debugger
     setTimeout(function () {
-      (0,_src_search__WEBPACK_IMPORTED_MODULE_2__.default)();
+      (0,_src_search__WEBPACK_IMPORTED_MODULE_3__.default)();
     }, 500);
   });
 });
 
 /***/ }),
 
-/***/ "./src/currency/chart.js":
-/*!*******************************!*\
-  !*** ./src/currency/chart.js ***!
-  \*******************************/
+/***/ "./src/coin/chart.js":
+/*!***************************!*\
+  !*** ./src/coin/chart.js ***!
+  \***************************/
 /*! namespace exports */
 /*! export default [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
@@ -54,7 +57,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => /* binding */ chart
 /* harmony export */ });
-/* harmony import */ var _currency__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./currency */ "./src/currency/currency.js");
+/* harmony import */ var _coin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./coin */ "./src/coin/coin.js");
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -76,13 +79,14 @@ function _chart() {
           case 0:
             initializeChart = function _initializeChart(data) {
               console.log("we in initializeChart");
+              debugger;
               var margin = {
                 top: 30,
                 right: 45,
                 bottom: 40,
                 left: 25
               };
-              var width = document.querySelector('#chart').offsetWidth - margin.left - margin.right;
+              var width = document.getElementById('chart').offsetWidth - margin.left - margin.right;
               var height = 400 - margin.top - margin.bottom; // add SVG to the page
 
               var svg = d3.select('#chart').append('svg').attr('width', width + margin['left'] + margin['right']).attr('height', height + margin['top'] + margin['bottom']).call(responsivefy).append('g').attr('transform', "translate(".concat(margin['left'], ",  ").concat(margin['top'], ")")); // find data range
@@ -293,10 +297,10 @@ function _chart() {
 
 /***/ }),
 
-/***/ "./src/currency/currency.js":
-/*!**********************************!*\
-  !*** ./src/currency/currency.js ***!
-  \**********************************/
+/***/ "./src/coin/coin.js":
+/*!**************************!*\
+  !*** ./src/coin/coin.js ***!
+  \**************************/
 /*! namespace exports */
 /*! export default [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
@@ -308,7 +312,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => /* binding */ showCoinDetails
 /* harmony export */ });
-/* harmony import */ var _chart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chart */ "./src/currency/chart.js");
+/* harmony import */ var _chart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chart */ "./src/coin/chart.js");
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -350,6 +354,8 @@ function _showCoinDetails() {
               }
             };
 
+            console.log("We in SHOW");
+
             if (symbol === undefined) {
               symbol = "bitcoin"; // chart(symbol)
             }
@@ -357,7 +363,7 @@ function _showCoinDetails() {
             main = document.querySelector('.main');
             apiUrl = "https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/".concat(symbol, "/");
             main.innerHTML = "";
-            _context.next = 7;
+            _context.next = 8;
             return fetch(apiUrl, {
               method: 'GET',
               mode: 'cors'
@@ -367,7 +373,7 @@ function _showCoinDetails() {
               return data;
             });
 
-          case 7:
+          case 8:
             coinInfo = _context.sent;
 
             if (coinInfo["symbol"] !== undefined) {
@@ -440,11 +446,9 @@ function _showCoinDetails() {
             chartEle = document.createElement('div');
             chartEle.id = "chart";
             main.appendChild(chartEle);
-            (0,_chart__WEBPACK_IMPORTED_MODULE_0__.default)(symbol); // const underChart = document.createElement('div');
-            // underChart.classList.add('under-chart');
-            // main.appendChild(underChart);
+            (0,_chart__WEBPACK_IMPORTED_MODULE_0__.default)(symbol);
 
-          case 13:
+          case 14:
           case "end":
             return _context.stop();
         }
@@ -530,7 +534,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => /* binding */ search
 /* harmony export */ });
-/* harmony import */ var _currency_currency__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./currency/currency */ "./src/currency/currency.js");
+/* harmony import */ var _coin_coin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./coin/coin */ "./src/coin/coin.js");
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -645,7 +649,7 @@ function search() {
   }();
 
   function select(symbol) {
-    (0,_currency_currency__WEBPACK_IMPORTED_MODULE_0__.default)(symbol.coinId);
+    (0,_coin_coin__WEBPACK_IMPORTED_MODULE_0__.default)(symbol.coinId);
     reset();
   }
 

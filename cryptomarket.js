@@ -1,5 +1,6 @@
-import chart from "./src/currency/chart";
 import modal from "./src/modal";
+import chart from "./src/coin/chart";
+import showCoinDetails from "./src/coin/coin";
 import search from "./src/search";
 import 'regenerator-runtime/runtime';
 
@@ -10,7 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // }
 
     modal();
-    chart();
+    showCoinDetails();
+    // chart();
 
     window.coinsArray = [];
 

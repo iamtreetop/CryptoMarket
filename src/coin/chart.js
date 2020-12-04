@@ -1,6 +1,6 @@
 // const rp = require('request-promise');
 const d3 = require('d3');
-import showCoinDetails from "./currency";
+import showCoinDetails from "./coin";
 
 export default async function chart(symbol) {
     if (symbol === undefined) {
@@ -59,9 +59,9 @@ export default async function chart(symbol) {
 
     function initializeChart (data) {
         console.log("we in initializeChart")
-
+        debugger
         const margin = { top: 30, right: 45, bottom: 40, left: 25 };
-        const width = document.querySelector('#chart').offsetWidth - margin.left - margin.right;
+        const width = document.getElementById('chart').offsetWidth - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom; 
         // add SVG to the page
         
