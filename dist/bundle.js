@@ -24,20 +24,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("We connected"); // if (symbol === undefined) {
-  //     symbol = "bitcoin"
-  // }
-
-  (0,_src_modal__WEBPACK_IMPORTED_MODULE_0__.default)();
-  (0,_src_coin_coin__WEBPACK_IMPORTED_MODULE_2__.default)(); // chart();
-
   window.coinsArray = [];
   document.querySelector('.searchInput').addEventListener('input', function () {
-    // debugger
     setTimeout(function () {
       (0,_src_search__WEBPACK_IMPORTED_MODULE_3__.default)();
     }, 500);
   });
+  (0,_src_modal__WEBPACK_IMPORTED_MODULE_0__.default)();
+  (0,_src_coin_coin__WEBPACK_IMPORTED_MODULE_2__.default)();
 });
 
 /***/ }),
@@ -145,30 +139,40 @@ function _chart() {
               // .attr('stroke', '#f9ac70') // coral
               .attr('stroke', '#f59c3e') // 
               .attr('d', movingAverageLine); // // /* Volume series bars */
-
-              var volData = data.filter(function (d) {
-                return d['volume'] !== null && d['volume'] !== 0;
-              });
-              var yMinVolume = d3.min(volData, function (d) {
-                return Math.min(d['volume']);
-              });
-              var yMaxVolume = d3.max(volData, function (d) {
-                return Math.max(d['volume']);
-              });
-              var yVolumeScale = d3.scaleLinear().domain([yMinVolume, yMaxVolume]).range([height, 0]);
-              svg.selectAll().data(volData).enter().append('rect').attr('x', function (d) {
-                return xScale(d['date']);
-              }).attr('y', function (d) {
-                return yVolumeScale(d['volume']);
-              }).attr('fill', function (d, i) {
-                if (i === 0) {
-                  return '#03a678';
-                } else {
-                  return volData[i - 1].close > d.close ? '#c0392b' : '#03a678';
-                }
-              }).attr('width', 1).attr('height', function (d) {
-                return height - yVolumeScale(d['volume']);
-              }); // renders x and y crosshair
+              // const volData = data.filter(d => d['volume'] !== null && d['volume']   !== 0);
+              // const yMinVolume = d3.min(volData, d => {
+              //     return Math.min(d['volume']);
+              // });
+              // const yMaxVolume = d3.max(volData, d => {
+              //     return Math.max(d['volume']);
+              // });
+              // const yVolumeScale = d3
+              //     .scaleLinear()
+              //     .domain([yMinVolume, yMaxVolume])
+              //     .range([height, 0]);
+              // svg
+              //     .selectAll()
+              //     .data(volData)
+              //     .enter()
+              //     .append('rect')
+              //     .attr('x', d => {
+              //         return xScale(d['date']);
+              //     })
+              //     .attr('y', d => {
+              //         return yVolumeScale(d['volume']);
+              //     })
+              //     .attr('fill', (d, i) => {
+              //         if (i === 0) {
+              //             return '#03a678';
+              //         } else {  
+              //             return volData[i - 1].close > d.close ? '#c0392b' : '#03a678'; 
+              //         }
+              //     })
+              //     .attr('width', 1)
+              //     .attr('height', d => {
+              //         return height - yVolumeScale(d['volume']);
+              //     });
+              // renders x and y crosshair
 
               var focus = svg.append('g').attr('class', 'focus').style('display', 'none');
               focus.append('circle').attr('r', 4.5);
@@ -223,7 +227,7 @@ function _chart() {
             };
 
             if (symbol === undefined) {
-              symbol = 'bitcoin'; // loadData;
+              symbol = 'bitcoin';
             }
 
             apiUrl = "https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/".concat(symbol, "/ohlc?vs_currency=usd&days=30");
@@ -342,7 +346,7 @@ function _showCoinDetails() {
             console.log("We in SHOW");
 
             if (symbol === undefined) {
-              symbol = "bitcoin"; // chart(symbol)
+              symbol = "bitcoin";
             }
 
             main = document.querySelector('.main');

@@ -4,7 +4,6 @@ import showCoinDetails from "./coin";
 export default async function chart(symbol) {
     if (symbol === undefined) {
         symbol = 'bitcoin'
-        // loadData;
     }
     const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/${symbol}/ohlc?vs_currency=usd&days=30`;
     const loadData = fetch(apiUrl, { 

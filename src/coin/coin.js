@@ -4,7 +4,6 @@ export default async function showCoinDetails(symbol) {
     console.log("We in SHOW")
     if (symbol === undefined) {
         symbol = "bitcoin"
-        // chart(symbol)
     }
 
     function formatThousands(num){
