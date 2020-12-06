@@ -62,7 +62,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-// const rp = require('request-promise');
 var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
 
 
@@ -146,40 +145,30 @@ function _chart() {
               // .attr('stroke', '#f9ac70') // coral
               .attr('stroke', '#f59c3e') // 
               .attr('d', movingAverageLine); // // /* Volume series bars */
-              // const volData = data.filter(d => d['volume'] !== null && d['volume']   !== 0);
-              // const yMinVolume = d3.min(volData, d => {
-              //     return Math.min(d['volume']);
-              // });
-              // const yMaxVolume = d3.max(volData, d => {
-              //     return Math.max(d['volume']);
-              // });
-              // const yVolumeScale = d3
-              //     .scaleLinear()
-              //     .domain([yMinVolume, yMaxVolume])
-              //     .range([height, 0]);
-              // svg
-              //     .selectAll()
-              //     .data(volData)
-              //     .enter()
-              //     .append('rect')
-              //     .attr('x', d => {
-              //         return xScale(d['date']);
-              //     })
-              //     .attr('y', d => {
-              //         return yVolumeScale(d['volume']);
-              //     })
-              //     .attr('fill', (d, i) => {
-              //         if (i === 0) {
-              //             return '#03a678';
-              //         } else {  
-              //             return volData[i - 1].close > d.close ? '#c0392b' : '#03a678'; 
-              //         }
-              //     })
-              //     .attr('width', 1)
-              //     .attr('height', d => {
-              //         return height - yVolumeScale(d['volume']);
-              //     });
-              // renders x and y crosshair
+
+              var volData = data.filter(function (d) {
+                return d['volume'] !== null && d['volume'] !== 0;
+              });
+              var yMinVolume = d3.min(volData, function (d) {
+                return Math.min(d['volume']);
+              });
+              var yMaxVolume = d3.max(volData, function (d) {
+                return Math.max(d['volume']);
+              });
+              var yVolumeScale = d3.scaleLinear().domain([yMinVolume, yMaxVolume]).range([height, 0]);
+              svg.selectAll().data(volData).enter().append('rect').attr('x', function (d) {
+                return xScale(d['date']);
+              }).attr('y', function (d) {
+                return yVolumeScale(d['volume']);
+              }).attr('fill', function (d, i) {
+                if (i === 0) {
+                  return '#03a678';
+                } else {
+                  return volData[i - 1].close > d.close ? '#c0392b' : '#03a678';
+                }
+              }).attr('width', 1).attr('height', function (d) {
+                return height - yVolumeScale(d['volume']);
+              }); // renders x and y crosshair
 
               var focus = svg.append('g').attr('class', 'focus').style('display', 'none');
               focus.append('circle').attr('r', 4.5);
@@ -274,11 +263,7 @@ function _chart() {
               // and call resize so that svg resizes on inital page load
 
 
-              svg.attr('viewBox', '0 0 ' + width + ' ' + height).attr('perserveAspectRatio', 'xMinYMid').call(resize); // to register multiple listeners for same event type,
-              // you need to add namespace, i.e., 'click.foo'
-              // necessary if you call invoke this function for multiple svgs
-              // api docs: https://github.com/mbostock/d3/wiki/Selections#on
-
+              svg.attr('viewBox', '0 0 ' + width + ' ' + height).attr('perserveAspectRatio', 'xMinYMid').call(resize);
               d3.select(window).on('resize.' + container.attr('id'), resize);
             }; // Kudos to Wen Tjun https://wentjun.com/
 

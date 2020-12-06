@@ -1,4 +1,3 @@
-// const rp = require('request-promise');
 const d3 = require('d3');
 import showCoinDetails from "./coin";
 
@@ -48,10 +47,6 @@ export default async function chart(symbol) {
             .attr('perserveAspectRatio', 'xMinYMid')
             .call(resize);
 
-        // to register multiple listeners for same event type,
-        // you need to add namespace, i.e., 'click.foo'
-        // necessary if you call invoke this function for multiple svgs
-        // api docs: https://github.com/mbostock/d3/wiki/Selections#on
         d3.select(window).on('resize.' + container.attr('id'), resize);
     };
 
@@ -63,8 +58,8 @@ export default async function chart(symbol) {
         const margin = { top: 30, right: 45, bottom: 40, left: 25 };
         const width = document.getElementById('chart').offsetWidth - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom; 
-        // add SVG to the page
         
+        // add SVG to the page
         const svg = d3
             .select('#chart')
             .append('svg')
