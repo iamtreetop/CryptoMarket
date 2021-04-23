@@ -71,8 +71,8 @@ function _chart() {
         switch (_context.prev = _context.next) {
           case 0:
             initializeChart = function _initializeChart(data) {
-              console.log("we in initializeChart");
-              debugger;
+              console.log("we in initializeChart"); // debugger
+
               var margin = {
                 top: 30,
                 right: 45,
@@ -230,7 +230,7 @@ function _chart() {
               symbol = 'bitcoin';
             }
 
-            apiUrl = "https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/".concat(symbol, "/ohlc?vs_currency=usd&days=30");
+            apiUrl = "https://api.coingecko.com/api/v3/coins/".concat(symbol, "/ohlc?vs_currency=usd&days=30");
             loadData = fetch(apiUrl, {
               method: 'GET',
               mode: 'cors'
@@ -350,7 +350,7 @@ function _showCoinDetails() {
             }
 
             main = document.querySelector('.main');
-            apiUrl = "https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/".concat(symbol, "/");
+            apiUrl = "https://api.coingecko.com/api/v3/coins/".concat(symbol, "/");
             main.innerHTML = "";
             _context.next = 8;
             return fetch(apiUrl, {
@@ -533,7 +533,7 @@ function search() {
   var result = document.querySelector('.searchResults');
   var searchInput = document.querySelector('.searchInput');
   var clear = document.getElementById('clear');
-  var apiUrl = "https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/list";
+  var apiUrl = "https://api.coingecko.com/api/v3/coins/list";
   var searchTerm = searchInput.value;
 
   var fetchCoins = /*#__PURE__*/function () {

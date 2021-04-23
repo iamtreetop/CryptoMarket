@@ -4,7 +4,7 @@ export default function search(){
     const result = document.querySelector('.searchResults');
     const searchInput = document.querySelector('.searchInput');
     const clear = document.getElementById('clear')
-    const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/list`;
+    const apiUrl = `https://api.coingecko.com/api/v3/coins/list`;
 
     let searchTerm = searchInput.value;
     

@@ -29,7 +29,7 @@ export default async function showCoinDetails(symbol) {
     }
 
     const main = document.querySelector('.main');
-    const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/${symbol}/`;
+    const apiUrl = `https://api.coingecko.com/api/v3/coins/${symbol}/`;
     main.innerHTML = "";
 
     const coinInfo = await fetch(apiUrl, {

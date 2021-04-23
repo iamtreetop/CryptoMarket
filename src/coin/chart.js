@@ -5,7 +5,7 @@ export default async function chart(symbol) {
     if (symbol === undefined) {
         symbol = 'bitcoin'
     }
-    const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/${symbol}/ohlc?vs_currency=usd&days=30`;
+    const apiUrl = `https://api.coingecko.com/api/v3/coins/${symbol}/ohlc?vs_currency=usd&days=30`;
     const loadData = fetch(apiUrl, { 
         method: 'GET',
         mode: 'cors' 
@@ -53,7 +53,7 @@ export default async function chart(symbol) {
 
     function initializeChart (data) {
         console.log("we in initializeChart")
-        debugger
+        // debugger
         const margin = { top: 30, right: 45, bottom: 40, left: 25 };
         const width = document.getElementById('chart').offsetWidth - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom; 
